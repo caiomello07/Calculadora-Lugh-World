@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
-import base64
+
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -12,14 +12,17 @@ st.set_page_config(
     layout="centered"
 )
 
+
 # ============================================================
 # CONFIGURAÇÕES
 # ============================================================
 
 APP_VERSION = "1.0.0"
+
 ATRIBUTOS = 8
 
 TIPOS = {
+
     "normal": {
         "min": 1,
         "max": 25,
@@ -44,7 +47,8 @@ TEXT = {
 
     "pt": {
 
-        "title": "✨ Calculadora de Perfeição de Lugh",
+        "title":
+            "✨ Calculadora de Perfeição de Lugh",
 
         "subtitle":
             "Descubra o quão raro seu Lugh realmente é.",
@@ -286,7 +290,6 @@ st.markdown(
     <style>
 
     .stApp {
-
         background:
             radial-gradient(
                 circle at 50% -10%,
@@ -296,107 +299,64 @@ st.markdown(
             #080A0F;
     }
 
-
     .main .block-container {
-
         max-width: 900px;
-
         padding-top: 1.5rem;
-
         padding-bottom: 3rem;
     }
 
-
     h1 {
-
         text-align: center;
-
         font-weight: 800;
-
         letter-spacing: -1px;
     }
 
-
     .subtitle {
-
         text-align: center;
-
         color: #8992A3;
-
         font-size: 16px;
-
         margin-top: -10px;
-
         margin-bottom: 25px;
     }
 
-
     .perfection-number {
-
         text-align: center;
-
         font-size: 58px;
-
         font-weight: 900;
-
         margin-top: 15px;
-
         line-height: 1.1;
     }
 
-
     .rarity-title {
-
         text-align: center;
-
         color: #858E9E;
-
         font-size: 13px;
-
         text-transform: uppercase;
-
         letter-spacing: 2px;
-
         margin-top: 20px;
     }
 
-
     .rarity-number {
-
         text-align: center;
-
         font-size: 46px;
-
         font-weight: 900;
-
         margin-top: 5px;
     }
 
-
     .tier {
-
         text-align: center;
-
         color: #AAB2C0;
-
         font-weight: 700;
-
         margin-bottom: 25px;
     }
 
-
     div.stButton > button {
-
         border-radius: 12px;
-
         min-height: 45px;
-
         font-weight: 700;
     }
 
-
     div[data-testid="stMetric"] {
-
         background:
             rgba(255,255,255,0.035);
 
@@ -404,50 +364,35 @@ st.markdown(
             1px solid rgba(255,255,255,0.07);
 
         border-radius: 16px;
-
         padding: 15px;
     }
 
-
     div[data-testid="stMetricValue"] {
-
         font-size: 21px;
     }
 
-
     div[data-testid="stExpander"] {
-
         border-radius: 14px;
-
         border-color:
             rgba(255,255,255,0.08);
     }
 
-
     @media (max-width: 600px) {
 
         .main .block-container {
-
             padding-left: 1rem;
-
             padding-right: 1rem;
         }
 
-
         .perfection-number {
-
             font-size: 45px;
         }
 
-
         .rarity-number {
-
             font-size: 36px;
         }
 
-
         h1 {
-
             font-size: 30px;
         }
     }
@@ -473,43 +418,12 @@ t = TEXT[
 
 try:
 
-    with open(
+    st.image(
         "logo.png",
-        "rb"
-    ) as f:
-
-        logo_base64 = base64.b64encode(
-            f.read()
-        ).decode()
-
-
-    st.markdown(
-        f"""
-        <div style="
-            width:100%;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            margin:0 auto 15px auto;
-        ">
-
-            <img
-                src="data:image/png;base64,{logo_base64}"
-                style="
-                    width:220px;
-                    max-width:80%;
-                    height:auto;
-                    display:block;
-                "
-            >
-
-        </div>
-        """,
-        unsafe_allow_html=True
+        width=220
     )
 
-
-except FileNotFoundError:
+except Exception:
 
     st.warning(
         "Arquivo logo.png não encontrado."
@@ -592,7 +506,7 @@ t = TEXT[
 
 
 # ============================================================
-# DISTRIBUIÇÃO
+# FUNÇÃO DE DISTRIBUIÇÃO
 # ============================================================
 
 @st.cache_data
@@ -602,7 +516,9 @@ def calcular_distribuicao(
     maximo
 ):
 
-    dp = {0: 1}
+    dp = {
+        0: 1
+    }
 
 
     for _ in range(
@@ -772,15 +688,18 @@ if calcular:
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # PERFECTION → SCORE
-    # ========================================================
+    # --------------------------------------------------------
 
     proporcao = (
+
         perfeicao
         -
         min_perfeicao
+
     ) / (
+
         100.0
         -
         min_perfeicao
@@ -812,20 +731,22 @@ if calcular:
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # CENTRO
-    # ========================================================
+    # --------------------------------------------------------
 
     centro_pontos = (
+
         min_pontos
         +
         max_pontos
+
     ) / 2
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # CAUDA
-    # ========================================================
+    # --------------------------------------------------------
 
     if pontos < centro_pontos:
 
@@ -882,7 +803,9 @@ if calcular:
 
 
     combinacoes_favoraveis = max(
+
         1,
+
         combinacoes_favoraveis
     )
 
@@ -904,9 +827,9 @@ if calcular:
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # CLASSIFICAÇÃO
-    # ========================================================
+    # --------------------------------------------------------
 
     if chance < 10:
 
@@ -936,9 +859,9 @@ if calcular:
         ]
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # SALVA RESULTADO
-    # ========================================================
+    # --------------------------------------------------------
 
     st.session_state.result = {
 
@@ -1244,7 +1167,6 @@ if st.session_state.result is not None:
                 f"<br>"
 
                 f"{t['probability_axis']}: "
-
                 f"%{{y:.8f}}%"
 
                 "<extra></extra>"
@@ -1296,19 +1218,16 @@ if st.session_state.result is not None:
             hovertemplate=(
 
                 f"{t['perfection']}: "
-
                 f"{perfeicao:.2f}%"
 
                 f"<br>"
 
                 f"{t['score']}: "
-
                 f"{pontos}"
 
                 f"<br>"
 
                 f"{t['probability']}: "
-
                 f"{porcentagem_real:.9f}%"
 
                 "<extra></extra>"
@@ -1409,6 +1328,16 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
+    st.divider()
+
+
+    st.subheader(
+        f"📊 {t['position']}"
+    )
+
+
+    # Posição percentual do Lugh
+
     if max_pontos > min_pontos:
 
         posicao_barra = (
@@ -1445,21 +1374,19 @@ if st.session_state.result is not None:
     )
 
 
-    # ========================================================
-    # TÍTULO DA ESCALA
-    # ========================================================
+    # Barra nativa do Streamlit
 
-    st.markdown(
-        "### 📊 " + t["position"]
+    st.progress(
+        int(posicao_barra)
     )
 
 
     # ========================================================
-    # BARRA
+    # MARCADOR DA POSIÇÃO
     # ========================================================
 
-    st.progress(
-        int(posicao_barra)
+    st.caption(
+        f"📍 {t['score']}: {pontos} / {max_pontos}"
     )
 
 
@@ -1474,50 +1401,50 @@ if st.session_state.result is not None:
 
     with escala[0]:
 
-        st.caption(
-            "🔴 " + t["extreme"]
+        st.markdown(
+            "🔴 **" + t["extreme"] + "**"
         )
 
 
     with escala[1]:
 
-        st.caption(
-            "🟣 " + t["very_rare"]
+        st.markdown(
+            "🟣 **" + t["very_rare"] + "**"
         )
 
 
     with escala[2]:
 
-        st.caption(
-            "🔵 " + t["rare"]
+        st.markdown(
+            "🔵 **" + t["rare"] + "**"
         )
 
 
     with escala[3]:
 
-        st.caption(
-            "🔷 " + t["common"]
+        st.markdown(
+            "🔷 **" + t["common"] + "**"
         )
 
 
     with escala[4]:
 
-        st.caption(
-            "🔵 " + t["rare"]
+        st.markdown(
+            "🔵 **" + t["rare"] + "**"
         )
 
 
     with escala[5]:
 
-        st.caption(
-            "🟣 " + t["very_rare"]
+        st.markdown(
+            "🟣 **" + t["very_rare"] + "**"
         )
 
 
     with escala[6]:
 
-        st.caption(
-            "🔴 " + t["extreme"]
+        st.markdown(
+            "🔴 **" + t["extreme"] + "**"
         )
 
 
@@ -1529,9 +1456,7 @@ if st.session_state.result is not None:
 
 
     with st.expander(
-
         t["how"],
-
         expanded=True
     ):
 
