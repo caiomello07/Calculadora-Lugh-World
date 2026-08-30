@@ -94,13 +94,13 @@ TEXT = {
             "📖 Como funciona a raridade?",
 
         "how_text":
-            "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver do centro da distribuição, mais comum ele será. Lughs com pontuações extremamente baixas ou extremamente altas são progressivamente mais raros.",
+            "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver da média da distribuição, mais comum ele será. Conforme o Lugh se afasta da média, ele se torna progressivamente mais raro.",
 
         "prismatic_title":
             "✨ Lughs Prismáticos",
 
         "prismatic_text":
-            "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria curva de distribuição.",
+            "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria distribuição.",
 
         "attributes":
             "📚 Sobre os Atributos dos Lughs",
@@ -188,13 +188,13 @@ TEXT = {
             "📖 How does rarity work?",
 
         "how_text":
-            "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the center of the distribution, the more common it is. Lughs with extremely low or extremely high scores are progressively rarer.",
+            "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the average of the distribution, the more common it is. As the Lugh moves away from the average, it becomes progressively rarer.",
 
         "prismatic_title":
             "✨ Prismatic Lughs",
 
         "prismatic_text":
-            "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own distribution curve.",
+            "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own distribution.",
 
         "attributes":
             "📚 About Lugh Attributes",
@@ -583,6 +583,284 @@ def calcular_distribuicao(
 
 
 # ============================================================
+# FUNÇÃO DA BARRA DE RARIDADE
+# ============================================================
+
+def calcular_posicao_barra(
+    perfeicao,
+    centro_perfeicao,
+    min_perfeicao
+):
+
+    # --------------------------------------------------------
+    # MARCOS VISUAIS
+    #
+    # Média       = Comum
+    # 75%         = Raro
+    # 85%         = Muito Raro
+    # 100%        = Máximo
+    #
+    # Posições:
+    #
+    # Média → 50%
+    # 75%   → 66%
+    # 85%   → 82%
+    # 100%  → 98.5%
+    #
+    # Os valores intermediários são interpolados
+    # suavemente entre esses pontos.
+    # --------------------------------------------------------
+
+    POS_MEDIA = 50.0
+    POS_75 = 66.0
+    POS_85 = 82.0
+    POS_100 = 98.5
+
+
+    # ========================================================
+    # LADO SUPERIOR
+    # ========================================================
+
+    if perfeicao >= centro_perfeicao:
+
+        # ----------------------------------------------------
+        # Média → 75%
+        # ----------------------------------------------------
+
+        if perfeicao <= 75.0:
+
+            intervalo = (
+                75.0
+                -
+                centro_perfeicao
+            )
+
+            if intervalo <= 0:
+
+                proporcao = 1.0
+
+            else:
+
+                proporcao = (
+                    perfeicao
+                    -
+                    centro_perfeicao
+                ) / intervalo
+
+
+            proporcao = max(
+                0.0,
+                min(
+                    1.0,
+                    proporcao
+                )
+            )
+
+
+            # Smoothstep
+            proporcao = (
+                proporcao
+                *
+                proporcao
+                *
+                (
+                    3
+                    -
+                    2
+                    *
+                    proporcao
+                )
+            )
+
+
+            return (
+                POS_MEDIA
+                +
+                (
+                    POS_75
+                    -
+                    POS_MEDIA
+                )
+                *
+                proporcao
+            )
+
+
+        # ----------------------------------------------------
+        # 75% → 85%
+        # ----------------------------------------------------
+
+        elif perfeicao <= 85.0:
+
+            proporcao = (
+                perfeicao
+                -
+                75.0
+            ) / 10.0
+
+
+            proporcao = max(
+                0.0,
+                min(
+                    1.0,
+                    proporcao
+                )
+            )
+
+
+            proporcao = (
+                proporcao
+                *
+                proporcao
+                *
+                (
+                    3
+                    -
+                    2
+                    *
+                    proporcao
+                )
+            )
+
+
+            return (
+                POS_75
+                +
+                (
+                    POS_85
+                    -
+                    POS_75
+                )
+                *
+                proporcao
+            )
+
+
+        # ----------------------------------------------------
+        # 85% → 100%
+        # ----------------------------------------------------
+
+        else:
+
+            proporcao = (
+                perfeicao
+                -
+                85.0
+            ) / 15.0
+
+
+            proporcao = max(
+                0.0,
+                min(
+                    1.0,
+                    proporcao
+                )
+            )
+
+
+            proporcao = (
+                proporcao
+                *
+                proporcao
+                *
+                (
+                    3
+                    -
+                    2
+                    *
+                    proporcao
+                )
+            )
+
+
+            return (
+                POS_85
+                +
+                (
+                    POS_100
+                    -
+                    POS_85
+                )
+                *
+                proporcao
+            )
+
+
+    # ========================================================
+    # LADO INFERIOR
+    #
+    # Mantém a barra visualmente simétrica em relação ao
+    # centro da distribuição.
+    # ========================================================
+
+    else:
+
+        distancia_maxima = (
+            centro_perfeicao
+            -
+            min_perfeicao
+        )
+
+
+        distancia_atual = (
+            centro_perfeicao
+            -
+            perfeicao
+        )
+
+
+        if distancia_maxima <= 0:
+
+            proporcao = 0.0
+
+        else:
+
+            proporcao = (
+                distancia_atual
+                /
+                distancia_maxima
+            )
+
+
+        proporcao = max(
+            0.0,
+            min(
+                1.0,
+                proporcao
+            )
+        )
+
+
+        # Smoothstep
+        proporcao = (
+            proporcao
+            *
+            proporcao
+            *
+            (
+                3
+                -
+                2
+                *
+                proporcao
+            )
+        )
+
+
+        return (
+            POS_MEDIA
+            -
+            (
+                POS_MEDIA
+                -
+                1.5
+            )
+            *
+            proporcao
+        )
+
+
+# ============================================================
 # CONFIGURAÇÃO
 # ============================================================
 
@@ -762,7 +1040,7 @@ if calcular:
 
 
     # ========================================================
-    # CENTRO
+    # CENTRO DA DISTRIBUIÇÃO
     # ========================================================
 
     centro_pontos = (
@@ -772,6 +1050,45 @@ if calcular:
         max_pontos
 
     ) / 2
+
+
+    # ========================================================
+    # PERFECTION DA MÉDIA
+    # ========================================================
+
+    centro_perfeicao = (
+
+        min_perfeicao
+
+        +
+
+        (
+
+            (
+                centro_pontos
+                -
+                min_pontos
+            )
+
+            /
+
+            (
+                max_pontos
+                -
+                min_pontos
+            )
+
+        )
+
+        *
+
+        (
+            100.0
+            -
+            min_perfeicao
+        )
+
+    )
 
 
     # ========================================================
@@ -882,152 +1199,19 @@ if calcular:
 
 
     # ========================================================
-    # POSIÇÃO NA DISTRIBUIÇÃO
+    # POSIÇÃO NA BARRA
     #
-    # NOVA LÓGICA
-    #
-    # Não usamos mais log10 puro para definir diretamente
-    # a posição do marcador.
-    #
-    # A raridade continua sendo calculada estatisticamente,
-    # porém sua representação visual utiliza uma curva
-    # suavizada.
-    #
-    # Isso evita que 80%, 85% e 90% fiquem comprimidos
-    # visualmente perto do centro.
-    #
-    # A mesma matemática é usada para Normal e Prismático,
-    # mas cada um utiliza sua própria distribuição.
+    # NOVA LÓGICA BASEADA NOS MARCOS
     # ========================================================
 
-    if pontos == centro_pontos:
+    posicao_barra = calcular_posicao_barra(
 
-        posicao_barra = 50.0
+        perfeicao,
 
-    else:
+        centro_perfeicao,
 
-        probabilidade_cauda = (
-
-            combinacoes_favoraveis
-            /
-            combinacoes_totais
-        )
-
-
-        probabilidade_cauda = max(
-
-            probabilidade_cauda,
-
-            1 / combinacoes_totais
-        )
-
-
-        # ----------------------------------------------------
-        # ÍNDICE DE RARIDADE
-        #
-        # A raridade é expressa em ordens de grandeza.
-        #
-        # Exemplo:
-        #
-        # 1 em 10       → 1
-        # 1 em 100      → 2
-        # 1 em 1.000    → 3
-        # 1 em 1.000.000 → 6
-        #
-        # Depois aplicamos uma raiz cúbica.
-        #
-        # Isso faz com que os níveis intermediários ganhem
-        # espaço visual sem destruir a proporção estatística.
-        # ----------------------------------------------------
-
-        raridade_log = -math.log10(
-            probabilidade_cauda
-        )
-
-
-        raridade_maxima = math.log10(
-            combinacoes_totais
-        )
-
-
-        if raridade_maxima > 0:
-
-            proporcao_raridade = (
-
-                raridade_log
-                /
-                raridade_maxima
-            )
-
-        else:
-
-            proporcao_raridade = 0.0
-
-
-        proporcao_raridade = max(
-            0.0,
-            min(
-                1.0,
-                proporcao_raridade
-            )
-        )
-
-
-        # ----------------------------------------------------
-        # CURVA VISUAL
-        #
-        # Expoente menor que 1 expande as regiões de raridade
-        # intermediárias.
-        #
-        # O valor 0.30 foi escolhido para que:
-        #
-        # 75%  → já entre na região de Muito Raro
-        # 80%  → fique claramente em Muito Raro
-        # 85%  → fique bem dentro de Muito Raro
-        # 90%  → avance em direção ao extremo
-        # 95%  → fique próximo do extremo
-        # 100% → extremo absoluto
-        #
-        # A lógica é proporcional à raridade e independente
-        # da faixa de atributos.
-        # ----------------------------------------------------
-
-        CURVA_RARIDADE = 0.30
-
-
-        proporcao_visual = (
-
-            proporcao_raridade
-            **
-            CURVA_RARIDADE
-        )
-
-
-        deslocamento = (
-
-            proporcao_visual
-            *
-            50.0
-        )
-
-
-        if pontos < centro_pontos:
-
-            posicao_barra = (
-
-                50.0
-                -
-                deslocamento
-            )
-
-        else:
-
-            posicao_barra = (
-
-                50.0
-                +
-                deslocamento
-            )
+        min_perfeicao
+    )
 
 
     posicao_barra = max(
@@ -1067,6 +1251,9 @@ if calcular:
 
         "min_perfeicao":
             min_perfeicao,
+
+        "centro_perfeicao":
+            centro_perfeicao,
 
         "chance":
             chance,
@@ -1299,17 +1486,21 @@ if st.session_state.result is not None:
         (
 
             (
+
                 score
                 -
                 min_pontos
+
             )
 
             /
 
             (
+
                 max_pontos
                 -
                 min_pontos
+
             )
 
         )
@@ -1317,9 +1508,11 @@ if st.session_state.result is not None:
         *
 
         (
+
             100.0
             -
             min_perfeicao
+
         )
 
         for score in scores
@@ -1329,9 +1522,11 @@ if st.session_state.result is not None:
     probabilities = [
 
         (
+
             dp[score]
             /
             combinacoes_totais
+
         )
 
         *
@@ -1520,14 +1715,20 @@ if st.session_state.result is not None:
             ],
 
             range=[
+
                 min_perfeicao,
+
                 100
+
             ],
 
             ticksuffix="%",
 
+
             gridcolor=(
+
                 "rgba(255,255,255,0.05)"
+
             ),
 
             zeroline=False
@@ -1540,7 +1741,9 @@ if st.session_state.result is not None:
             ],
 
             gridcolor=(
+
                 "rgba(255,255,255,0.05)"
+
             ),
 
             zeroline=False
@@ -1549,7 +1752,9 @@ if st.session_state.result is not None:
         legend=dict(
 
             bgcolor=(
+
                 "rgba(0,0,0,0)"
+
             )
         ),
 
@@ -1571,8 +1776,11 @@ if st.session_state.result is not None:
         use_container_width=True,
 
         config={
+
             "displayModeBar": False,
+
             "responsive": True
+
         }
     )
 
@@ -1856,9 +2064,13 @@ body {{
 
 
     components.html(
+
         html_barra,
+
         height=105,
+
         scrolling=False
+
     )
 
 
@@ -1870,30 +2082,43 @@ body {{
 
 
     with st.expander(
+
         t["how"],
+
         expanded=True
+
     ):
 
         st.write(
+
             t["how_text"]
+
         )
 
 
     with st.expander(
+
         t["prismatic_title"]
+
     ):
 
         st.write(
+
             t["prismatic_text"]
+
         )
 
 
     with st.expander(
+
         t["attributes"]
+
     ):
 
         st.write(
+
             t["attributes_text"]
+
         )
 
 
