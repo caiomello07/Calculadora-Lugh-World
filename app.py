@@ -1261,36 +1261,134 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
-    scale1, scale2, scale3, scale4 = st.columns(4)
+    # Posição do Lugh dentro da distribuição
+posicao_barra = (
+    (pontos - min_pontos)
+    /
+    (max_pontos - min_pontos)
+) * 100
+
+# Garante que fique entre 0 e 100
+posicao_barra = max(
+    0,
+    min(
+        100,
+        posicao_barra
+    )
+)
 
 
-    with scale1:
+st.markdown(
+    f"""
+    <div style="
+        width: 100%;
+        margin-top: 18px;
+        margin-bottom: 5px;
+    ">
 
-        st.caption(
-            f"● {t['common']}"
-        )
+        <!-- BARRA -->
+        <div style="
+            position: relative;
+            width: 100%;
+            height: 14px;
+            border-radius: 10px;
+
+            background: linear-gradient(
+                to right,
+
+                #F43F5E 0%,
+                #C084FC 18%,
+                #60A5FA 32%,
+                #4CC9F0 45%,
+                #4CC9F0 55%,
+                #60A5FA 68%,
+                #C084FC 82%,
+                #F43F5E 100%
+            );
+
+            box-shadow:
+                0 0 12px rgba(76, 201, 240, 0.15);
+        ">
+
+            <!-- MARCADOR -->
+            <div style="
+                position: absolute;
+
+                left: {posicao_barra}%;
+
+                top: 50%;
+
+                transform:
+                    translate(-50%, -50%);
+
+                width: 22px;
+                height: 22px;
+
+                border-radius: 50%;
+
+                background: {cor};
+
+                border:
+                    3px solid white;
+
+                box-shadow:
+                    0 0 10px {cor};
+
+                z-index: 2;
+            ">
+            </div>
+
+        </div>
 
 
-    with scale2:
+        <!-- MARCAÇÕES -->
+        <div style="
+            display: flex;
+            justify-content: space-between;
 
-        st.caption(
-            f"● {t['rare']}"
-        )
+            margin-top: 8px;
 
+            color: #8992A3;
 
-    with scale3:
+            font-size: 12px;
 
-        st.caption(
-            f"● {t['very_rare']}"
-        )
+            font-weight: 600;
+        ">
 
+            <span>
+                ● {t['extreme']}
+            </span>
 
-    with scale4:
+            <span>
+                ● {t['very_rare']}
+            </span>
 
-        st.caption(
-            f"● {t['extreme']}"
-        )
+            <span>
+                ● {t['rare']}
+            </span>
 
+            <span>
+                ● {t['common']}
+            </span>
+
+            <span>
+                ● {t['rare']}
+            </span>
+
+            <span>
+                ● {t['very_rare']}
+            </span>
+
+            <span>
+                ● {t['extreme']}
+            </span>
+
+        </div>
+
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # ============================================================
 # INFORMAÇÕES
