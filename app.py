@@ -21,7 +21,6 @@ APP_VERSION = "1.0.0"
 ATRIBUTOS = 8
 
 TIPOS = {
-
     "normal": {
         "min": 1,
         "max": 25,
@@ -252,10 +251,6 @@ st.markdown(
     """
     <style>
 
-    /* ======================================================
-       FUNDO
-       ====================================================== */
-
     .stApp {
         background:
             radial-gradient(
@@ -266,21 +261,11 @@ st.markdown(
             #080A0F;
     }
 
-
-    /* ======================================================
-       CONTAINER
-       ====================================================== */
-
     .main .block-container {
         max-width: 900px;
         padding-top: 1.5rem;
         padding-bottom: 3rem;
     }
-
-
-    /* ======================================================
-       LOGO
-       ====================================================== */
 
     .logo-container {
         width: 100%;
@@ -297,21 +282,11 @@ st.markdown(
         display: block;
     }
 
-
-    /* ======================================================
-       TÍTULO
-       ====================================================== */
-
     h1 {
         text-align: center;
         font-weight: 800;
         letter-spacing: -1px;
     }
-
-
-    /* ======================================================
-       SUBTÍTULO
-       ====================================================== */
 
     .subtitle {
         text-align: center;
@@ -321,11 +296,6 @@ st.markdown(
         margin-bottom: 25px;
     }
 
-
-    /* ======================================================
-       NÚMERO DE PERFECTION
-       ====================================================== */
-
     .perfection-number {
         text-align: center;
         font-size: 58px;
@@ -333,11 +303,6 @@ st.markdown(
         margin-top: 15px;
         line-height: 1.1;
     }
-
-
-    /* ======================================================
-       TÍTULO RARIDADE
-       ====================================================== */
 
     .rarity-title {
         text-align: center;
@@ -348,22 +313,12 @@ st.markdown(
         margin-top: 20px;
     }
 
-
-    /* ======================================================
-       NÚMERO RARIDADE
-       ====================================================== */
-
     .rarity-number {
         text-align: center;
         font-size: 46px;
         font-weight: 900;
         margin-top: 5px;
     }
-
-
-    /* ======================================================
-       TIER
-       ====================================================== */
 
     .tier {
         text-align: center;
@@ -372,21 +327,11 @@ st.markdown(
         margin-bottom: 25px;
     }
 
-
-    /* ======================================================
-       BOTÕES
-       ====================================================== */
-
     div.stButton > button {
         border-radius: 12px;
         min-height: 45px;
         font-weight: 700;
     }
-
-
-    /* ======================================================
-       MÉTRICAS
-       ====================================================== */
 
     div[data-testid="stMetric"] {
         background:
@@ -399,26 +344,15 @@ st.markdown(
         padding: 15px;
     }
 
-
     div[data-testid="stMetricValue"] {
         font-size: 21px;
     }
-
-
-    /* ======================================================
-       EXPANDERS
-       ====================================================== */
 
     div[data-testid="stExpander"] {
         border-radius: 14px;
         border-color:
             rgba(255,255,255,0.08);
     }
-
-
-    /* ======================================================
-       RESPONSIVIDADE
-       ====================================================== */
 
     @media (max-width: 600px) {
 
@@ -475,6 +409,7 @@ try:
             align-items: center;
             margin: 0 auto 15px auto;
         ">
+
             <img
                 src="data:image/png;base64,{logo_base64}"
                 style="
@@ -485,6 +420,7 @@ try:
                     margin: 0 auto;
                 "
             >
+
         </div>
         """,
         unsafe_allow_html=True
@@ -563,8 +499,6 @@ with lang_en:
             st.rerun()
 
 
-# Atualiza idioma
-
 t = TEXT[st.session_state.language]
 
 
@@ -581,9 +515,7 @@ def calcular_distribuicao(
 
     dp = {0: 1}
 
-    for _ in range(
-        quantidade_atributos
-    ):
+    for _ in range(quantidade_atributos):
 
         proximo_dp = {}
 
@@ -615,7 +547,6 @@ def calcular_distribuicao(
 
 st.divider()
 
-
 with st.container(border=True):
 
     st.subheader(
@@ -638,7 +569,6 @@ with st.container(border=True):
             horizontal=True
         )
 
-
         if tipo_visual == t["normal"]:
 
             tipo = "normal"
@@ -647,17 +577,13 @@ with st.container(border=True):
 
             tipo = "prismatic"
 
-
         configuracao = TIPOS[tipo]
 
         min_valor = configuracao["min"]
 
         max_valor = configuracao["max"]
 
-        min_perfeicao = (
-            configuracao["min_perfeicao"]
-        )
-
+        min_perfeicao = configuracao["min_perfeicao"]
 
         perfeicao = st.number_input(
 
@@ -674,7 +600,6 @@ with st.container(border=True):
             format="%.2f"
         )
 
-
         calcular = st.form_submit_button(
 
             f"✨ {t['calculate']}",
@@ -690,31 +615,24 @@ with st.container(border=True):
 if calcular:
 
     dp = calcular_distribuicao(
-
         ATRIBUTOS,
-
         min_valor,
-
         max_valor
     )
-
 
     min_pontos = (
         ATRIBUTOS * min_valor
     )
 
-
     max_pontos = (
         ATRIBUTOS * max_valor
     )
-
 
     quantidade_valores = (
         max_valor
         - min_valor
         + 1
     )
-
 
     combinacoes_totais = (
         quantidade_valores
@@ -732,16 +650,13 @@ if calcular:
         (100.0 - min_perfeicao)
     )
 
-
     pontos = round(
-
         min_pontos
         +
         proporcao
         *
         (max_pontos - min_pontos)
     )
-
 
     pontos = max(
         min_pontos,
@@ -948,11 +863,9 @@ if st.session_state.result is not None:
 
     st.divider()
 
-
     st.subheader(
         resultado["tipo_visual"]
     )
-
 
     st.markdown(
         f"""
@@ -965,7 +878,6 @@ if st.session_state.result is not None:
         """,
         unsafe_allow_html=True
     )
-
 
     st.markdown(
         f"""
@@ -994,7 +906,6 @@ if st.session_state.result is not None:
 
     col1, col2, col3 = st.columns(3)
 
-
     with col1:
 
         st.metric(
@@ -1002,14 +913,12 @@ if st.session_state.result is not None:
             f"{pontos} / {max_pontos}"
         )
 
-
     with col2:
 
         st.metric(
             t["probability"],
             f"{porcentagem_real:.9f}%"
         )
-
 
     with col3:
 
@@ -1031,11 +940,9 @@ if st.session_state.result is not None:
 
     st.divider()
 
-
     st.subheader(
         t["distribution"]
     )
-
 
     scores = list(
         range(
@@ -1043,7 +950,6 @@ if st.session_state.result is not None:
             max_pontos + 1
         )
     )
-
 
     probabilities = [
 
@@ -1055,7 +961,6 @@ if st.session_state.result is not None:
 
         for score in scores
     ]
-
 
     probabilidade_score = (
         dp[pontos]
@@ -1069,7 +974,6 @@ if st.session_state.result is not None:
     # ========================================================
 
     fig = go.Figure()
-
 
     if tipo == "normal":
 
@@ -1262,7 +1166,7 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
-  posicao_barra = (
+    posicao_barra = (
         (pontos - min_pontos)
         /
         (max_pontos - min_pontos)
@@ -1276,63 +1180,109 @@ if st.session_state.result is not None:
         )
     )
 
+
     st.markdown(
         f"""
-<div style="width:100%; margin:20px 0 10px 0;">
-
-    <div style="
-        position:relative;
-        width:100%;
-        height:14px;
-        border-radius:10px;
-        background:linear-gradient(
-            to right,
-            #F43F5E 0%,
-            #C084FC 18%,
-            #60A5FA 32%,
-            #4CC9F0 45%,
-            #4CC9F0 55%,
-            #60A5FA 68%,
-            #C084FC 82%,
-            #F43F5E 100%
-        );
-    ">
-
         <div style="
-            position:absolute;
-            left:{posicao_barra}%;
-            top:50%;
-            width:22px;
-            height:22px;
-            transform:translate(-50%, -50%);
-            border-radius:50%;
-            background:{cor};
-            border:3px solid white;
-            box-shadow:0 0 10px {cor};
-        "></div>
+            width:100%;
+            margin:20px 0 10px 0;
+        ">
 
-    </div>
+            <div style="
+                position:relative;
+                width:100%;
+                height:14px;
+                border-radius:10px;
+                background:linear-gradient(
+                    to right,
+                    #F43F5E 0%,
+                    #C084FC 18%,
+                    #60A5FA 32%,
+                    #4CC9F0 45%,
+                    #4CC9F0 55%,
+                    #60A5FA 68%,
+                    #C084FC 82%,
+                    #F43F5E 100%
+                );
+            ">
 
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        margin-top:8px;
-        color:#8992A3;
-        font-size:11px;
-        font-weight:600;
-    ">
-        <span>{t["extreme"]}</span>
-        <span>{t["very_rare"]}</span>
-        <span>{t["rare"]}</span>
-        <span>{t["common"]}</span>
-        <span>{t["rare"]}</span>
-        <span>{t["very_rare"]}</span>
-        <span>{t["extreme"]}</span>
-    </div>
+                <div style="
+                    position:absolute;
+                    left:{posicao_barra}%;
+                    top:50%;
+                    width:22px;
+                    height:22px;
+                    transform:translate(-50%, -50%);
+                    border-radius:50%;
+                    background:{cor};
+                    border:3px solid white;
+                    box-shadow:0 0 10px {cor};
+                "></div>
 
-</div>
-""",
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin-top:8px;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+            ">
+
+                <span>{t["extreme"]}</span>
+
+                <span>{t["very_rare"]}</span>
+
+                <span>{t["rare"]}</span>
+
+                <span>{t["common"]}</span>
+
+                <span>{t["rare"]}</span>
+
+                <span>{t["very_rare"]}</span>
+
+                <span>{t["extreme"]}</span>
+
+            </div>
+
+        </div>
+        """,
         unsafe_allow_html=True
+    )
+
+
+# ============================================================
+# INFORMAÇÕES
+# ============================================================
+
+st.divider()
+
+with st.expander(
+    t["how"],
+    expanded=True
+):
+
+    st.write(
+        t["how_text"]
+    )
+
+
+with st.expander(
+    t["prismatic_title"]
+):
+
+    st.write(
+        t["prismatic_text"]
+    )
+
+
+with st.expander(
+    t["attributes"]
+):
+
+    st.write(
+        t["attributes_text"]
     )
 
 
@@ -1342,14 +1292,13 @@ if st.session_state.result is not None:
 
 st.divider()
 
-
 st.markdown(
     f"""
     <div style="
-        text-align: center;
-        color: #697386;
-        font-size: 13px;
-        padding: 10px 0 20px 0;
+        text-align:center;
+        color:#697386;
+        font-size:13px;
+        padding:10px 0 20px 0;
     ">
         ✨ Lugh Perfection Calculator
         • Version {APP_VERSION}
