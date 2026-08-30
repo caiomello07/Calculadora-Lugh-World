@@ -261,7 +261,18 @@ with logo_3:
 # TÍTULO
 # ============================================================
 
+t = TEXT[st.session_state.language]
+
 st.title(t["title"])
+
+st.markdown(
+    f"""
+    <div class="subtitle">
+        {t["subtitle"]}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 st.markdown(
     f"""
