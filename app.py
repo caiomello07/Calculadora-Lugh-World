@@ -47,6 +47,7 @@ TIPOS = {
 TEXT = {
 
     "en": {
+        "title": "✨ Lugh Perfection Calculator",
         "subtitle": "Discover how rare your Lugh really is.",
         "language": "Language",
         "configuration": "Configuration",
@@ -81,6 +82,7 @@ TEXT = {
     },
 
     "pt": {
+        "title": "✨ Calculadora de Perfection de Lugh",
         "subtitle": "Descubra o quão raro seu Lugh realmente é.",
         "language": "Idioma",
         "configuration": "Configuração",
@@ -121,7 +123,7 @@ TEXT = {
 # ============================================================
 
 if "language" not in st.session_state:
-    st.session_state.language = "en"
+    st.session_state.language = "pt"
 
 if "result" not in st.session_state:
     st.session_state.result = None
@@ -259,7 +261,7 @@ with logo_3:
 # TÍTULO
 # ============================================================
 
-st.title("✨ Lugh Perfection Calculator")
+st.title(t["title"])
 
 st.markdown(
     f"""
@@ -973,5 +975,5 @@ with st.expander(
 st.divider()
 
 st.caption(
-    f"✨ Lugh Perfection Calculator • Version {APP_VERSION}"
+    f'✨ Lugh Perfection Calculator • Version {APP_VERSION} • Created by Caio "Laion" Melo'
 )
