@@ -326,26 +326,14 @@ st.markdown(
        LOGO
        ====================================================== */
 
-    div[data-testid="stImage"] {
-
-        display: flex !important;
-
-        justify-content: center !important;
-
-        align-items: center !important;
-
-        width: 100% !important;
-    }
-
-
-    div[data-testid="stImage"] img {
-
-        display: block !important;
-
-        margin-left: auto !important;
-
-        margin-right: auto !important;
-    }
+    st.markdown(
+    """
+    <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+        <img src="data:image/png;base64,{}" style="width: 220px; height: auto;">
+    </div>
+    """.format(LOGO_BASE64),
+    unsafe_allow_html=True
+)
 
 
     /* ======================================================
