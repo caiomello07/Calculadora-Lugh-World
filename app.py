@@ -55,9 +55,6 @@ TEXT = {
         "subtitle":
             "Descubra o quão raro seu Lugh realmente é.",
 
-        "language":
-            "Idioma",
-
         "configuration":
             "⚙️ Configuração",
 
@@ -104,7 +101,7 @@ TEXT = {
             "✨ Lughs Prismáticos",
 
         "prismatic_text":
-            "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria distribuição de atributos.",
+            "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria curva de distribuição.",
 
         "attributes":
             "📚 Sobre os Atributos dos Lughs",
@@ -152,9 +149,6 @@ TEXT = {
         "subtitle":
             "Discover how rare your Lugh really is.",
 
-        "language":
-            "Language",
-
         "configuration":
             "⚙️ Configuration",
 
@@ -201,7 +195,7 @@ TEXT = {
             "✨ Prismatic Lughs",
 
         "prismatic_text":
-            "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own attribute distribution.",
+            "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own distribution curve.",
 
         "attributes":
             "📚 About Lugh Attributes",
@@ -246,13 +240,15 @@ TEXT = {
 # SESSION STATE
 # ============================================================
 
-if "language" not in st.session_state:
+# Português é o idioma padrão
 
+if "language" not in st.session_state:
     st.session_state.language = "pt"
 
 
-if "result" not in st.session_state:
+# Guarda o resultado do cálculo
 
+if "result" not in st.session_state:
     st.session_state.result = None
 
 
@@ -263,6 +259,10 @@ if "result" not in st.session_state:
 st.markdown(
     """
     <style>
+
+    /* ======================================================
+       FUNDO
+       ====================================================== */
 
     .stApp {
 
@@ -276,6 +276,10 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       CONTAINER
+       ====================================================== */
+
     .main .block-container {
 
         max-width: 900px;
@@ -286,6 +290,10 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       TÍTULO
+       ====================================================== */
+
     h1 {
 
         text-align: center;
@@ -295,6 +303,10 @@ st.markdown(
         letter-spacing: -1px;
     }
 
+
+    /* ======================================================
+       SUBTÍTULO
+       ====================================================== */
 
     .subtitle {
 
@@ -310,6 +322,36 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       LOGO
+       ====================================================== */
+
+    div[data-testid="stImage"] {
+
+        display: flex !important;
+
+        justify-content: center !important;
+
+        align-items: center !important;
+
+        width: 100% !important;
+    }
+
+
+    div[data-testid="stImage"] img {
+
+        display: block !important;
+
+        margin-left: auto !important;
+
+        margin-right: auto !important;
+    }
+
+
+    /* ======================================================
+       NÚMERO DE PERFECTION
+       ====================================================== */
+
     .perfection-number {
 
         text-align: center;
@@ -319,8 +361,14 @@ st.markdown(
         font-weight: 900;
 
         margin-top: 15px;
+
+        line-height: 1.1;
     }
 
+
+    /* ======================================================
+       TÍTULO RARIDADE
+       ====================================================== */
 
     .rarity-title {
 
@@ -338,6 +386,10 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       NÚMERO RARIDADE
+       ====================================================== */
+
     .rarity-number {
 
         text-align: center;
@@ -349,6 +401,10 @@ st.markdown(
         margin-top: 5px;
     }
 
+
+    /* ======================================================
+       TIER
+       ====================================================== */
 
     .tier {
 
@@ -362,6 +418,10 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       BOTÕES
+       ====================================================== */
+
     div.stButton > button {
 
         border-radius: 12px;
@@ -371,6 +431,10 @@ st.markdown(
         font-weight: 700;
     }
 
+
+    /* ======================================================
+       MÉTRICAS
+       ====================================================== */
 
     div[data-testid="stMetric"] {
 
@@ -392,6 +456,51 @@ st.markdown(
     }
 
 
+    /* ======================================================
+       EXPANDERS
+       ====================================================== */
+
+    div[data-testid="stExpander"] {
+
+        border-radius: 14px;
+
+        border-color:
+            rgba(255,255,255,0.08);
+    }
+
+
+    /* ======================================================
+       RESPONSIVIDADE
+       ====================================================== */
+
+    @media (max-width: 600px) {
+
+        .main .block-container {
+
+            padding-left: 1rem;
+
+            padding-right: 1rem;
+        }
+
+
+        .perfection-number {
+
+            font-size: 45px;
+        }
+
+
+        .rarity-number {
+
+            font-size: 36px;
+        }
+
+
+        h1 {
+
+            font-size: 30px;
+        }
+    }
+
     </style>
     """,
     unsafe_allow_html=True
@@ -399,37 +508,30 @@ st.markdown(
 
 
 # ============================================================
+# TEXTOS
+# ============================================================
+
+t = TEXT[st.session_state.language]
+
+
+# ============================================================
 # LOGO
 # ============================================================
 
-logo_left, logo_center, logo_right = st.columns(
-    [1, 2, 1]
-)
+try:
 
-with logo_center:
+    logo = Image.open("logo.png")
 
-    try:
+    st.image(
+        logo,
+        width=220
+    )
 
-        logo = Image.open("logo.png")
+except FileNotFoundError:
 
-        st.image(
-            logo,
-            width=220
-        )
-
-    except FileNotFoundError:
-
-        st.warning(
-            "Arquivo logo.png não encontrado."
-        )
-
-# ============================================================
-# TEXTOS ATUAIS
-# ============================================================
-
-t = TEXT[
-    st.session_state.language
-]
+    st.warning(
+        "Arquivo logo.png não encontrado."
+    )
 
 
 # ============================================================
@@ -440,6 +542,10 @@ st.title(
     t["title"]
 )
 
+
+# ============================================================
+# SUBTÍTULO
+# ============================================================
 
 st.markdown(
     f"""
@@ -452,7 +558,7 @@ st.markdown(
 
 
 # ============================================================
-# IDIOMA
+# IDIOMAS
 # ============================================================
 
 lang_left, lang_pt, lang_en, lang_right = st.columns(
@@ -460,7 +566,9 @@ lang_left, lang_pt, lang_en, lang_right = st.columns(
 )
 
 
+# ------------------------------------------------------------
 # PORTUGUÊS
+# ------------------------------------------------------------
 
 with lang_pt:
 
@@ -483,7 +591,9 @@ with lang_pt:
             st.rerun()
 
 
+# ------------------------------------------------------------
 # INGLÊS
+# ------------------------------------------------------------
 
 with lang_en:
 
@@ -506,11 +616,57 @@ with lang_en:
             st.rerun()
 
 
-# Atualiza os textos depois da troca
+# Atualiza o idioma depois dos botões
 
-t = TEXT[
-    st.session_state.language
-]
+t = TEXT[st.session_state.language]
+
+
+# ============================================================
+# DISTRIBUIÇÃO
+# ============================================================
+
+@st.cache_data
+def calcular_distribuicao(
+    quantidade_atributos,
+    minimo,
+    maximo
+):
+
+    dp = {0: 1}
+
+
+    for _ in range(
+        quantidade_atributos
+    ):
+
+        proximo_dp = {}
+
+
+        for soma, quantidade in dp.items():
+
+            for valor in range(
+                minimo,
+                maximo + 1
+            ):
+
+                nova_soma = soma + valor
+
+
+                proximo_dp[nova_soma] = (
+
+                    proximo_dp.get(
+                        nova_soma,
+                        0
+                    )
+
+                    + quantidade
+                )
+
+
+        dp = proximo_dp
+
+
+    return dp
 
 
 # ============================================================
@@ -532,7 +688,7 @@ with st.container(border=True):
     ):
 
         # ----------------------------------------------------
-        # TIPO
+        # TIPO DE LUGH
         # ----------------------------------------------------
 
         tipo_visual = st.radio(
@@ -602,63 +758,14 @@ with st.container(border=True):
 
 
 # ============================================================
-# DISTRIBUIÇÃO EXATA
-# ============================================================
-
-@st.cache_data
-def calcular_distribuicao(
-
-    quantidade_atributos,
-
-    minimo,
-
-    maximo
-):
-
-    dp = {0: 1}
-
-
-    for _ in range(
-        quantidade_atributos
-    ):
-
-        proximo_dp = {}
-
-
-        for soma, quantidade in dp.items():
-
-            for valor in range(
-                minimo,
-                maximo + 1
-            ):
-
-                nova_soma = (
-                    soma + valor
-                )
-
-
-                proximo_dp[nova_soma] = (
-
-                    proximo_dp.get(
-                        nova_soma,
-                        0
-                    )
-
-                    + quantidade
-                )
-
-
-        dp = proximo_dp
-
-
-    return dp
-
-
-# ============================================================
 # CÁLCULO
 # ============================================================
 
 if calcular:
+
+    # --------------------------------------------------------
+    # DISTRIBUIÇÃO
+    # --------------------------------------------------------
 
     dp = calcular_distribuicao(
 
@@ -669,6 +776,10 @@ if calcular:
         max_valor
     )
 
+
+    # --------------------------------------------------------
+    # LIMITES
+    # --------------------------------------------------------
 
     min_pontos = (
         ATRIBUTOS * min_valor
@@ -721,6 +832,10 @@ if calcular:
     )
 
 
+    # --------------------------------------------------------
+    # GARANTE LIMITES
+    # --------------------------------------------------------
+
     pontos = max(
 
         min_pontos,
@@ -733,7 +848,7 @@ if calcular:
 
 
     # --------------------------------------------------------
-    # CENTRO DA DISTRIBUIÇÃO
+    # CENTRO
     # --------------------------------------------------------
 
     centro_pontos = (
@@ -745,7 +860,7 @@ if calcular:
 
 
     # --------------------------------------------------------
-    # CAUDA
+    # CAUDA DA DISTRIBUIÇÃO
     # --------------------------------------------------------
 
     if pontos < centro_pontos:
@@ -840,16 +955,13 @@ if calcular:
 
         tier = t["common"]
 
-
     elif chance < 100:
 
         tier = t["rare"]
 
-
     elif chance < 1000:
 
         tier = t["very_rare"]
-
 
     else:
 
@@ -912,9 +1024,7 @@ if calcular:
 
 if st.session_state.result is not None:
 
-    resultado = (
-        st.session_state.result
-    )
+    resultado = st.session_state.result
 
 
     tipo = resultado["tipo"]
@@ -960,9 +1070,16 @@ if st.session_state.result is not None:
     )
 
 
+    # --------------------------------------------------------
+    # PERFECTION
+    # --------------------------------------------------------
+
     st.markdown(
         f"""
-        <div class="perfection-number">
+        <div
+            class="perfection-number"
+            style="color:{cor};"
+        >
             {perfeicao:.2f}%
         </div>
         """,
@@ -970,10 +1087,9 @@ if st.session_state.result is not None:
     )
 
 
-    st.caption(
-        t["perfection"]
-    )
-
+    # --------------------------------------------------------
+    # RARIDADE
+    # --------------------------------------------------------
 
     st.markdown(
         f"""
@@ -1072,6 +1188,8 @@ if st.session_state.result is not None:
     ]
 
 
+    # Probabilidade do score exato
+
     probabilidade_score = (
 
         dp[pontos]
@@ -1087,19 +1205,26 @@ if st.session_state.result is not None:
     fig = go.Figure()
 
 
-    fill_color = (
+    # --------------------------------------------------------
+    # COR DO PREENCHIMENTO
+    # --------------------------------------------------------
 
-        "rgba(76,201,240,0.12)"
+    if tipo == "normal":
 
-        if tipo == "normal"
+        fill_color = (
+            "rgba(76,201,240,0.12)"
+        )
 
-        else
+    else:
 
-        "rgba(217,70,239,0.12)"
-    )
+        fill_color = (
+            "rgba(217,70,239,0.12)"
+        )
 
 
+    # --------------------------------------------------------
     # CURVA
+    # --------------------------------------------------------
 
     fig.add_trace(
 
@@ -1131,7 +1256,9 @@ if st.session_state.result is not None:
                 f"{t['score']}: %{{x}}"
 
                 f"<br>"
+
                 f"{t['probability_axis']}: "
+
                 f"%{{y:.8f}}%"
 
                 "<extra></extra>"
@@ -1140,7 +1267,9 @@ if st.session_state.result is not None:
     )
 
 
+    # --------------------------------------------------------
     # LINHA DO LUGH
+    # --------------------------------------------------------
 
     fig.add_vline(
 
@@ -1154,7 +1283,9 @@ if st.session_state.result is not None:
     )
 
 
+    # --------------------------------------------------------
     # MARCADOR
+    # --------------------------------------------------------
 
     fig.add_trace(
 
@@ -1185,14 +1316,19 @@ if st.session_state.result is not None:
             hovertemplate=(
 
                 f"{t['perfection']}: "
+
                 f"{perfeicao:.2f}%"
 
                 f"<br>"
+
                 f"{t['score']}: "
+
                 f"{pontos}"
 
                 f"<br>"
+
                 f"{t['probability']}: "
+
                 f"{porcentagem_real:.9f}%"
 
                 "<extra></extra>"
@@ -1202,7 +1338,7 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # LAYOUT
+    # LAYOUT DO GRÁFICO
     # ========================================================
 
     fig.update_layout(
@@ -1265,6 +1401,10 @@ if st.session_state.result is not None:
     )
 
 
+    # ========================================================
+    # EXIBE GRÁFICO
+    # ========================================================
+
     st.plotly_chart(
 
         fig,
@@ -1284,45 +1424,34 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
-    st.progress(
-
-        min(
-
-            1.0,
-
-            pontos / max_pontos
-        )
-    )
-
-
     scale1, scale2, scale3, scale4 = st.columns(4)
 
 
     with scale1:
 
         st.caption(
-            t["common"]
+            f"● {t['common']}"
         )
 
 
     with scale2:
 
         st.caption(
-            t["rare"]
+            f"● {t['rare']}"
         )
 
 
     with scale3:
 
         st.caption(
-            t["very_rare"]
+            f"● {t['very_rare']}"
         )
 
 
     with scale4:
 
         st.caption(
-            t["extreme"]
+            f"● {t['extreme']}"
         )
 
 
@@ -1368,8 +1497,18 @@ with st.expander(
 st.divider()
 
 
-st.caption(
-    f'✨ Lugh Perfection Calculator '
-    f'• Version {APP_VERSION} '
-    f'• Created by Caio "Laion" Melo'
+st.markdown(
+    f"""
+    <div style="
+        text-align: center;
+        color: #697386;
+        font-size: 13px;
+        padding: 10px 0 20px 0;
+    ">
+        ✨ Lugh Perfection Calculator
+        • Version {APP_VERSION}
+        • Created by Caio "Laion" Melo
+    </div>
+    """,
+    unsafe_allow_html=True
 )
