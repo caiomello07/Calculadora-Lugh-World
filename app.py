@@ -20,11 +20,13 @@ ATRIBUTOS = 8
 TIPOS = {
     "Lugh Normal": {
         "min": 1,
-        "max": 25
+        "max": 25,
+        "min_perfeicao": 4.0
     },
     "Lugh Prismático": {
         "min": 12,
-        "max": 25
+        "max": 25,
+        "min_perfeicao": 48.0
     }
 }
 
@@ -83,6 +85,7 @@ tipo = st.radio(
 
 min_valor = TIPOS[tipo]["min"]
 max_valor = TIPOS[tipo]["max"]
+min_perfeicao = TIPOS[tipo]["min_perfeicao"]
 
 min_pontos = ATRIBUTOS * min_valor
 max_pontos = ATRIBUTOS * max_valor
@@ -109,9 +112,9 @@ dp = calcular_distribuicao(
 
 perfeicao = st.number_input(
     "Perfection",
-    min_value=4.0,
+    min_value=min_perfeicao,
     max_value=100.0,
-    value=50.0,
+    value=min_perfeicao,
     step=0.01,
     format="%.2f"
 )
@@ -130,7 +133,10 @@ if st.button(
     # TRANSFORMA % EM PONTUAÇÃO
     # ======================================
 
-    proporcao = (perfeicao - 4) / 96
+    proporcao = (
+        (perfeicao - min_perfeicao)
+        / (100.0 - min_perfeicao)
+    )
 
     pontos = round(
         min_pontos
@@ -211,7 +217,7 @@ if st.button(
     )
 
     st.write(
-        f"**Probability:** "
+        f"**Exact probability:** "
         f"{porcentagem_real:.9f}%"
     )
 
