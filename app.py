@@ -1166,11 +1166,23 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
-    posicao_barra = (
-        (pontos - min_pontos)
-        /
-        (max_pontos - min_pontos)
-    ) * 100
+   st.markdown("---")
+
+    st.caption("📊 " + t["position"])
+
+    # Posição percentual do Lugh na faixa de atributos
+    if max_pontos > min_pontos:
+
+        posicao_barra = (
+            (pontos - min_pontos)
+            /
+            (max_pontos - min_pontos)
+        ) * 100
+
+    else:
+
+        posicao_barra = 50
+
 
     posicao_barra = max(
         0,
@@ -1181,77 +1193,80 @@ if st.session_state.result is not None:
     )
 
 
-    st.markdown(
-        f"""
-        <div style="
-            width:100%;
-            margin:20px 0 10px 0;
-        ">
+    # Barra visual simples usando caracteres
+    total_blocos = 30
 
-            <div style="
-                position:relative;
-                width:100%;
-                height:14px;
-                border-radius:10px;
-                background:linear-gradient(
-                    to right,
-                    #F43F5E 0%,
-                    #C084FC 18%,
-                    #60A5FA 32%,
-                    #4CC9F0 45%,
-                    #4CC9F0 55%,
-                    #60A5FA 68%,
-                    #C084FC 82%,
-                    #F43F5E 100%
-                );
-            ">
+    bloco_atual = round(
+        (posicao_barra / 100)
+        * total_blocos
+    )
 
-                <div style="
-                    position:absolute;
-                    left:{posicao_barra}%;
-                    top:50%;
-                    width:22px;
-                    height:22px;
-                    transform:translate(-50%, -50%);
-                    border-radius:50%;
-                    background:{cor};
-                    border:3px solid white;
-                    box-shadow:0 0 10px {cor};
-                "></div>
-
-            </div>
-
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                margin-top:8px;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-            ">
-
-                <span>{t["extreme"]}</span>
-
-                <span>{t["very_rare"]}</span>
-
-                <span>{t["rare"]}</span>
-
-                <span>{t["common"]}</span>
-
-                <span>{t["rare"]}</span>
-
-                <span>{t["very_rare"]}</span>
-
-                <span>{t["extreme"]}</span>
-
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True
+    bloco_atual = max(
+        0,
+        min(
+            total_blocos,
+            bloco_atual
+        )
     )
 
 
+    barra = ""
+
+    for i in range(total_blocos):
+
+        if i == bloco_atual:
+
+            barra += "🔵"
+
+        elif i < 7:
+
+            barra += "🟥"
+
+        elif i < 12:
+
+            barra += "🟣"
+
+        elif i < 18:
+
+            barra += "🔷"
+
+        elif i < 23:
+
+            barra += "🔷"
+
+        elif i < 28:
+
+            barra += "🟣"
+
+        else:
+
+            barra += "🟥"
+
+
+    st.markdown(
+        barra
+    )
+
+
+    col_a, col_b, col_c = st.columns(3)
+
+    with col_a:
+
+        st.caption(
+            "🔴 " + t["extreme"]
+        )
+
+    with col_b:
+
+        st.caption(
+            "🔵 " + t["common"]
+        )
+
+    with col_c:
+
+        st.caption(
+            "🔴 " + t["extreme"]
+        )
 # ============================================================
 # INFORMAÇÕES
 # ============================================================
