@@ -882,17 +882,22 @@ if calcular:
 
 
     # ========================================================
-    # POSIÇÃO ESTATÍSTICA
+    # POSIÇÃO NA DISTRIBUIÇÃO
     #
-    # A barra representa a posição do Lugh na distribuição.
+    # NOVA LÓGICA
     #
-    # O centro da curva fica exatamente em 50%.
+    # Não usamos mais log10 puro para definir diretamente
+    # a posição do marcador.
     #
-    # Quanto mais rara a combinação, mais próxima do extremo
-    # correspondente ela fica.
+    # A raridade continua sendo calculada estatisticamente,
+    # porém sua representação visual utiliza uma curva
+    # suavizada.
     #
-    # Utilizamos a probabilidade acumulada da cauda para evitar
-    # que pequenas diferenças de Perfection pareçam lineares.
+    # Isso evita que 80%, 85% e 90% fiquem comprimidos
+    # visualmente perto do centro.
+    #
+    # A mesma matemática é usada para Normal e Prismático,
+    # mas cada um utiliza sua própria distribuição.
     # ========================================================
 
     if pontos == centro_pontos:
@@ -901,64 +906,115 @@ if calcular:
 
     else:
 
-        # Probabilidade da cauda.
-        #
-        # Para um ponto acima do centro:
-        #    P(X >= pontos)
-        #
-        # Para um ponto abaixo do centro:
-        #    P(X <= pontos)
-
         probabilidade_cauda = (
+
             combinacoes_favoraveis
             /
             combinacoes_totais
         )
 
 
-        # Evita log(0)
         probabilidade_cauda = max(
+
             probabilidade_cauda,
+
             1 / combinacoes_totais
         )
 
 
-        # Converte a probabilidade em uma escala logarítmica.
+        # ----------------------------------------------------
+        # ÍNDICE DE RARIDADE
         #
-        # 50% = centro
+        # A raridade é expressa em ordens de grandeza.
         #
-        # Quanto menor a probabilidade,
-        # maior o deslocamento.
+        # Exemplo:
         #
-        # O valor de referência 0.5 representa o centro.
+        # 1 em 10       → 1
+        # 1 em 100      → 2
+        # 1 em 1.000    → 3
+        # 1 em 1.000.000 → 6
+        #
+        # Depois aplicamos uma raiz cúbica.
+        #
+        # Isso faz com que os níveis intermediários ganhem
+        # espaço visual sem destruir a proporção estatística.
+        # ----------------------------------------------------
 
         raridade_log = -math.log10(
             probabilidade_cauda
         )
 
 
-        # Normalização visual.
+        raridade_maxima = math.log10(
+            combinacoes_totais
+        )
+
+
+        if raridade_maxima > 0:
+
+            proporcao_raridade = (
+
+                raridade_log
+                /
+                raridade_maxima
+            )
+
+        else:
+
+            proporcao_raridade = 0.0
+
+
+        proporcao_raridade = max(
+            0.0,
+            min(
+                1.0,
+                proporcao_raridade
+            )
+        )
+
+
+        # ----------------------------------------------------
+        # CURVA VISUAL
         #
-        # O máximo é limitado a 100% para manter o marcador
-        # dentro da barra.
+        # Expoente menor que 1 expande as regiões de raridade
+        # intermediárias.
+        #
+        # O valor 0.30 foi escolhido para que:
+        #
+        # 75%  → já entre na região de Muito Raro
+        # 80%  → fique claramente em Muito Raro
+        # 85%  → fique bem dentro de Muito Raro
+        # 90%  → avance em direção ao extremo
+        # 95%  → fique próximo do extremo
+        # 100% → extremo absoluto
+        #
+        # A lógica é proporcional à raridade e independente
+        # da faixa de atributos.
+        # ----------------------------------------------------
+
+        CURVA_RARIDADE = 0.30
+
+
+        proporcao_visual = (
+
+            proporcao_raridade
+            **
+            CURVA_RARIDADE
+        )
+
 
         deslocamento = (
 
-            raridade_log
-            /
-            max(
-                1.0,
-                -math.log10(
-                    1 / combinacoes_totais
-                )
-            )
-
-        ) * 50.0
+            proporcao_visual
+            *
+            50.0
+        )
 
 
         if pontos < centro_pontos:
 
             posicao_barra = (
+
                 50.0
                 -
                 deslocamento
@@ -967,6 +1023,7 @@ if calcular:
         else:
 
             posicao_barra = (
+
                 50.0
                 +
                 deslocamento
@@ -974,7 +1031,9 @@ if calcular:
 
 
     posicao_barra = max(
+
         1.5,
+
         min(
             98.5,
             posicao_barra
@@ -1532,10 +1591,6 @@ if st.session_state.result is not None:
 
     # ========================================================
     # BARRA
-    #
-    # IMPORTANTE:
-    # Esta parte é renderizada dentro de um componente HTML
-    # isolado. Assim o Streamlit não mostra o HTML como texto.
     # ========================================================
 
     html_barra = f"""
