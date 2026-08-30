@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 import pandas as pd
 from PIL import Image
@@ -1036,4 +1035,3 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-```
