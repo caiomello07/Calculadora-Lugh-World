@@ -1262,15 +1262,12 @@ if st.session_state.result is not None:
     # ESCALA DE RARIDADE
     # ========================================================
 
-    # Posição do Lugh dentro da distribuição
-    posicao_barra = (
+  posicao_barra = (
         (pontos - min_pontos)
         /
         (max_pontos - min_pontos)
     ) * 100
 
-
-    # Garante que fique entre 0 e 100
     posicao_barra = max(
         0,
         min(
@@ -1279,152 +1276,63 @@ if st.session_state.result is not None:
         )
     )
 
-
     st.markdown(
         f"""
+<div style="width:100%; margin:20px 0 10px 0;">
+
+    <div style="
+        position:relative;
+        width:100%;
+        height:14px;
+        border-radius:10px;
+        background:linear-gradient(
+            to right,
+            #F43F5E 0%,
+            #C084FC 18%,
+            #60A5FA 32%,
+            #4CC9F0 45%,
+            #4CC9F0 55%,
+            #60A5FA 68%,
+            #C084FC 82%,
+            #F43F5E 100%
+        );
+    ">
+
         <div style="
-            width: 100%;
-            margin-top: 18px;
-            margin-bottom: 5px;
-        ">
+            position:absolute;
+            left:{posicao_barra}%;
+            top:50%;
+            width:22px;
+            height:22px;
+            transform:translate(-50%, -50%);
+            border-radius:50%;
+            background:{cor};
+            border:3px solid white;
+            box-shadow:0 0 10px {cor};
+        "></div>
 
-            <!-- BARRA -->
-            <div style="
-                position: relative;
-                width: 100%;
-                height: 14px;
-                border-radius: 10px;
+    </div>
 
-                background: linear-gradient(
-                    to right,
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        margin-top:8px;
+        color:#8992A3;
+        font-size:11px;
+        font-weight:600;
+    ">
+        <span>{t["extreme"]}</span>
+        <span>{t["very_rare"]}</span>
+        <span>{t["rare"]}</span>
+        <span>{t["common"]}</span>
+        <span>{t["rare"]}</span>
+        <span>{t["very_rare"]}</span>
+        <span>{t["extreme"]}</span>
+    </div>
 
-                    #F43F5E 0%,
-                    #C084FC 18%,
-                    #60A5FA 32%,
-                    #4CC9F0 45%,
-                    #4CC9F0 55%,
-                    #60A5FA 68%,
-                    #C084FC 82%,
-                    #F43F5E 100%
-                );
-
-                box-shadow:
-                    0 0 12px rgba(76, 201, 240, 0.15);
-            ">
-
-                <!-- MARCADOR -->
-                <div style="
-                    position: absolute;
-
-                    left: {posicao_barra}%;
-
-                    top: 50%;
-
-                    transform:
-                        translate(-50%, -50%);
-
-                    width: 22px;
-                    height: 22px;
-
-                    border-radius: 50%;
-
-                    background: {cor};
-
-                    border:
-                        3px solid white;
-
-                    box-shadow:
-                        0 0 10px {cor};
-
-                    z-index: 2;
-                ">
-                </div>
-
-            </div>
-
-
-            <!-- MARCAÇÕES -->
-            <div style="
-                display: flex;
-                justify-content: space-between;
-
-                margin-top: 8px;
-
-                color: #8992A3;
-
-                font-size: 12px;
-
-                font-weight: 600;
-            ">
-
-                <span>
-                    ● {t['extreme']}
-                </span>
-
-                <span>
-                    ● {t['very_rare']}
-                </span>
-
-                <span>
-                    ● {t['rare']}
-                </span>
-
-                <span>
-                    ● {t['common']}
-                </span>
-
-                <span>
-                    ● {t['rare']}
-                </span>
-
-                <span>
-                    ● {t['very_rare']}
-                </span>
-
-                <span>
-                    ● {t['extreme']}
-                </span>
-
-            </div>
-
-        </div>
-        """,
+</div>
+""",
         unsafe_allow_html=True
-    )
-
-
-# ============================================================
-# INFORMAÇÕES
-# ============================================================
-
-st.divider()
-
-
-with st.expander(
-    t["how"],
-    expanded=True
-):
-
-    st.write(
-        t["how_text"]
-    )
-
-
-with st.expander(
-    t["prismatic_title"]
-):
-
-    st.write(
-        t["prismatic_text"]
-    )
-
-
-with st.expander(
-    t["attributes"]
-):
-
-    st.write(
-        t["attributes_text"]
     )
 
 
