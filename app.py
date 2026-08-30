@@ -1,7 +1,6 @@
 ```python
 import streamlit as st
 import pandas as pd
-import numpy as np
 from PIL import Image
 
 
@@ -12,8 +11,7 @@ from PIL import Image
 st.set_page_config(
     page_title="Lugh Perfection Calculator",
     page_icon="✨",
-    layout="centered",
-    initial_sidebar_state="collapsed"
+    layout="centered"
 )
 
 
@@ -31,7 +29,7 @@ TIPOS = {
         "max": 25,
         "min_perfeicao": 4.0,
         "color": "#4CC9F0",
-        "glow": "rgba(76, 201, 240, 0.25)"
+        "glow": "rgba(76, 201, 240, 0.18)"
     },
 
     "Lugh Prismático": {
@@ -39,7 +37,7 @@ TIPOS = {
         "max": 25,
         "min_perfeicao": 48.0,
         "color": "#D946EF",
-        "glow": "rgba(217, 70, 239, 0.25)"
+        "glow": "rgba(217, 70, 239, 0.18)"
     }
 }
 
@@ -48,247 +46,68 @@ TIPOS = {
 # TRADUÇÕES
 # ============================================================
 
-TRANSLATIONS = {
+TEXT = {
 
     "pt": {
-
-        "subtitle":
-            "Descubra o quão raro seu Lugh realmente é.",
-
-        "configuration":
-            "Configuração",
-
-        "lugh_type":
-            "Tipo de Lugh",
-
-        "perfection":
-            "Perfection",
-
-        "calculate":
-            "CALCULAR",
-
-        "rarity":
-            "Raridade",
-
-        "equivalent_score":
-            "Pontuação Equivalente",
-
-        "exact_probability":
-            "Probabilidade Exata",
-
-        "possible_combinations":
-            "Combinações Possíveis",
-
-        "distribution":
-            "Distribuição de Raridade",
-
-        "distribution_position":
-            "Posição na distribuição",
-
-        "lower_tail":
-            "Cauda inferior",
-
-        "upper_tail":
-            "Cauda superior",
-
-        "center":
-            "Centro",
-
-        "common":
-            "Comum",
-
-        "rare":
-            "Raro",
-
-        "very_rare":
-            "Muito Raro",
-
-        "extremely_rare":
-            "Extremamente Raro",
-
-        "how_works":
-            "Como funciona?",
-
-        "how_works_text":
-            """
-            A raridade é calculada utilizando a distribuição estatística
-            de todas as combinações possíveis de atributos.
-
-            Quanto mais próximo um Lugh estiver do centro da distribuição,
-            mais comum ele será.
-
-            Lughs com pontuações extremamente baixas ou extremamente altas
-            aparecem com menor frequência e, portanto, são progressivamente
-            mais raros.
-            """,
-
-        "prismatic":
-            "✨ Lughs Prismáticos",
-
-        "prismatic_text":
-            """
-            Lughs Prismáticos possuem uma faixa de atributos diferente
-            dos Lughs Normais.
-
-            Por isso, sua raridade é calculada utilizando uma distribuição
-            própria, levando em consideração exclusivamente as combinações
-            possíveis dentro da faixa Prismática.
-            """,
-
-        "attributes":
-            "Sobre os Atributos dos Lughs",
-
-        "attributes_text":
-            """
-            Cada Lugh possui 8 atributos.
-
-            A pontuação total é determinada pela soma desses atributos.
-            A calculadora compara essa pontuação com todas as combinações
-            matematicamente possíveis para aquele tipo de Lugh.
-
-            Isso permite determinar não apenas a Perfection, mas também
-            o quão estatisticamente rara é aquela combinação de atributos.
-            """,
-
-        "common_desc":
-            "Uma combinação bastante comum.",
-
-        "rare_desc":
-            "Uma combinação menos frequente.",
-
-        "very_rare_desc":
-            "Uma combinação estatisticamente incomum.",
-
-        "extremely_rare_desc":
-            "Uma combinação extremamente difícil de encontrar.",
-
-        "your_lugh":
-            "SEU LUGH",
-
-        "footer":
-            "Lugh Perfection Calculator"
+        "subtitle": "Descubra o quão raro seu Lugh realmente é.",
+        "configuration": "Configuração",
+        "lugh_type": "Tipo de Lugh",
+        "normal": "Lugh Normal",
+        "prismatic": "Lugh Prismático",
+        "perfection": "Perfection",
+        "calculate": "CALCULAR",
+        "rarity": "Raridade",
+        "equivalent_score": "Pontuação Equivalente",
+        "exact_probability": "Probabilidade Exata",
+        "possible_combinations": "Combinações Possíveis",
+        "distribution": "Distribuição de Raridade",
+        "lower_tail": "Cauda inferior",
+        "upper_tail": "Cauda superior",
+        "center": "Centro",
+        "common": "Comum",
+        "rare": "Raro",
+        "very_rare": "Muito Raro",
+        "extremely_rare": "Extremamente Raro",
+        "how_works": "Como funciona a raridade?",
+        "how_works_text": "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver do centro da distribuição, mais comum ele será. Lughs com pontuações extremamente baixas ou extremamente altas são progressivamente mais raros.",
+        "prismatic_title": "✨ Lughs Prismáticos",
+        "prismatic_text": "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria distribuição de atributos.",
+        "attributes": "Sobre os Atributos dos Lughs",
+        "attributes_text": "Cada Lugh possui 8 atributos. A pontuação total é determinada pela soma desses atributos. A calculadora compara essa pontuação com todas as combinações matematicamente possíveis para aquele tipo de Lugh.",
+        "your_lugh": "SEU LUGH",
+        "distribution_position": "Posição na distribuição",
+        "footer": "Lugh Perfection Calculator"
     },
 
-
     "en": {
-
-        "subtitle":
-            "Discover how rare your Lugh really is.",
-
-        "configuration":
-            "Configuration",
-
-        "lugh_type":
-            "Lugh Type",
-
-        "perfection":
-            "Perfection",
-
-        "calculate":
-            "CALCULATE",
-
-        "rarity":
-            "Rarity",
-
-        "equivalent_score":
-            "Equivalent Score",
-
-        "exact_probability":
-            "Exact Probability",
-
-        "possible_combinations":
-            "Possible Combinations",
-
-        "distribution":
-            "Rarity Distribution",
-
-        "distribution_position":
-            "Distribution position",
-
-        "lower_tail":
-            "Lower tail",
-
-        "upper_tail":
-            "Upper tail",
-
-        "center":
-            "Center",
-
-        "common":
-            "Common",
-
-        "rare":
-            "Rare",
-
-        "very_rare":
-            "Very Rare",
-
-        "extremely_rare":
-            "Extremely Rare",
-
-        "how_works":
-            "How does rarity work?",
-
-        "how_works_text":
-            """
-            Rarity is calculated using the statistical distribution
-            of all possible attribute combinations.
-
-            The closer a Lugh is to the center of the distribution,
-            the more common it is.
-
-            Lughs with extremely low or extremely high scores occur
-            less frequently and are therefore progressively rarer.
-            """,
-
-        "prismatic":
-            "✨ Prismatic Lughs",
-
-        "prismatic_text":
-            """
-            Prismatic Lughs have a different attribute range from
-            Normal Lughs.
-
-            Their rarity is therefore calculated using their own
-            distribution curve, based exclusively on the possible
-            combinations within the Prismatic attribute range.
-            """,
-
-        "attributes":
-            "About Lugh Attributes",
-
-        "attributes_text":
-            """
-            Each Lugh has 8 attributes.
-
-            The total score is determined by adding these attributes
-            together.
-
-            The calculator compares this score against every mathematically
-            possible combination for that type of Lugh.
-
-            This allows us to determine not only the Perfection value,
-            but also how statistically rare that particular attribute
-            combination is.
-            """,
-
-        "common_desc":
-            "A very common combination.",
-
-        "rare_desc":
-            "A less frequent combination.",
-
-        "very_rare_desc":
-            "A statistically uncommon combination.",
-
-        "extremely_rare_desc":
-            "An extremely difficult combination to find.",
-
-        "your_lugh":
-            "YOUR LUGH",
-
-        "footer":
-            "Lugh Perfection Calculator"
+        "subtitle": "Discover how rare your Lugh really is.",
+        "configuration": "Configuration",
+        "lugh_type": "Lugh Type",
+        "normal": "Lugh Normal",
+        "prismatic": "Lugh Prismatic",
+        "perfection": "Perfection",
+        "calculate": "CALCULATE",
+        "rarity": "Rarity",
+        "equivalent_score": "Equivalent Score",
+        "exact_probability": "Exact Probability",
+        "possible_combinations": "Possible Combinations",
+        "distribution": "Rarity Distribution",
+        "lower_tail": "Lower tail",
+        "upper_tail": "Upper tail",
+        "center": "Center",
+        "common": "Common",
+        "rare": "Rare",
+        "very_rare": "Very Rare",
+        "extremely_rare": "Extremely Rare",
+        "how_works": "How does rarity work?",
+        "how_works_text": "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the center of the distribution, the more common it is. Lughs with extremely low or extremely high scores are progressively rarer.",
+        "prismatic_title": "✨ Prismatic Lughs",
+        "prismatic_text": "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own attribute distribution.",
+        "attributes": "About Lugh Attributes",
+        "attributes_text": "Each Lugh has 8 attributes. The total score is determined by adding these attributes together. The calculator compares this score against every mathematically possible combination for that type of Lugh.",
+        "your_lugh": "YOUR LUGH",
+        "distribution_position": "Distribution position",
+        "footer": "Lugh Perfection Calculator"
     }
 }
 
@@ -300,27 +119,23 @@ TRANSLATIONS = {
 if "language" not in st.session_state:
     st.session_state.language = "en"
 
-
-language_col1, language_col2, language_col3 = st.columns(
-    [1, 1, 1]
-)
+language_col1, language_col2, language_col3 = st.columns([1, 1, 1])
 
 with language_col2:
 
-    language = st.radio(
+    idioma = st.radio(
         "Language",
         ["🇺🇸 English", "🇧🇷 Português"],
         horizontal=True,
         label_visibility="collapsed"
     )
 
-    if language == "🇧🇷 Português":
+    if idioma == "🇧🇷 Português":
         st.session_state.language = "pt"
     else:
         st.session_state.language = "en"
 
-
-t = TRANSLATIONS[st.session_state.language]
+t = TEXT[st.session_state.language]
 
 
 # ============================================================
@@ -331,57 +146,47 @@ st.markdown(
     """
     <style>
 
-    /* =====================================================
-       GLOBAL
-       ===================================================== */
+    /* =========================
+       PÁGINA
+       ========================= */
 
     .stApp {
         background:
             radial-gradient(
-                circle at 50% -10%,
-                rgba(120, 80, 255, 0.12),
-                transparent 40%
+                circle at 50% -15%,
+                rgba(115, 80, 255, 0.16),
+                transparent 42%
             ),
             #080A0F;
     }
 
     .main .block-container {
         max-width: 900px;
-        padding-top: 2rem;
+        padding-top: 1.5rem;
         padding-bottom: 3rem;
     }
 
-    h1, h2, h3 {
-        letter-spacing: -0.5px;
-    }
 
-
-    /* =====================================================
+    /* =========================
        HEADER
-       ===================================================== */
+       ========================= */
 
-    .logo-container {
+    .logo-wrapper {
         text-align: center;
-        margin-top: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
-    .logo-container img {
+    .logo-wrapper img {
         max-width: 180px;
     }
 
     .main-title {
         text-align: center;
         font-size: 42px;
-        font-weight: 800;
+        font-weight: 850;
+        letter-spacing: -1px;
+        color: white;
         margin-bottom: 5px;
-        background: linear-gradient(
-            90deg,
-            #ffffff,
-            #bfc7d5
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
@@ -392,164 +197,146 @@ st.markdown(
     }
 
 
-    /* =====================================================
+    /* =========================
        CARDS
-       ===================================================== */
+       ========================= */
 
-    .custom-card {
-        background: rgba(20, 23, 32, 0.85);
+    .card {
+        background: rgba(20, 23, 32, 0.90);
         border: 1px solid rgba(255,255,255,0.07);
         border-radius: 20px;
-        padding: 25px;
+        padding: 24px;
         margin-top: 15px;
         margin-bottom: 20px;
-        box-shadow:
-            0 10px 40px rgba(0,0,0,0.25);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.20);
     }
 
-    .section-title {
+    .card-title {
         font-size: 18px;
-        font-weight: 700;
-        color: #ffffff;
-        margin-bottom: 15px;
+        font-weight: 750;
+        color: white;
+        margin-bottom: 12px;
     }
 
 
-    /* =====================================================
-       RESULTADO PRINCIPAL
-       ===================================================== */
+    /* =========================
+       RESULTADO
+       ========================= */
 
     .result-card {
+        border-radius: 25px;
+        padding: 35px 20px;
+        text-align: center;
+        margin-top: 28px;
+        margin-bottom: 22px;
+
         background:
             radial-gradient(
                 circle at 50% 0%,
                 var(--glow),
-                transparent 55%
+                transparent 60%
             ),
             #11141D;
 
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 24px;
-        padding: 35px 25px;
-        text-align: center;
-        margin-top: 25px;
-        margin-bottom: 25px;
+        border: 1px solid var(--accent-border);
+
+        box-shadow:
+            0 15px 50px rgba(0,0,0,0.28);
+    }
+
+    .result-type {
+        color: #8992A3;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 12px;
+        margin-bottom: 10px;
     }
 
     .result-perfection {
-        font-size: 54px;
-        font-weight: 900;
-        color: #ffffff;
+        font-size: 58px;
         line-height: 1;
-        margin-bottom: 8px;
+        font-weight: 900;
+        color: white;
     }
 
-    .result-label {
-        color: #8C95A5;
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+    .result-perfection-label {
+        color: #737D8D;
+        font-size: 13px;
+        margin-top: 7px;
     }
 
     .rarity-label {
-        margin-top: 28px;
-        color: #8C95A5;
-        font-size: 13px;
+        color: #737D8D;
+        font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 2px;
+        margin-top: 30px;
     }
 
     .rarity-value {
-        font-size: 42px;
+        font-size: 44px;
+        line-height: 1.1;
         font-weight: 900;
-        color: #ffffff;
-        margin-top: 2px;
+        margin-top: 5px;
     }
 
     .rarity-tier {
         display: inline-block;
-        margin-top: 10px;
-        padding: 6px 14px;
-        border-radius: 20px;
-        background: rgba(255,255,255,0.07);
-        color: #D7DCE5;
+        padding: 7px 16px;
+        margin-top: 12px;
+        border-radius: 30px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #E3E7EE;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 700;
     }
 
 
-    /* =====================================================
-       METRICS
-       ===================================================== */
+    /* =========================
+       MÉTRICAS
+       ========================= */
 
-    .metric-card {
+    .metric {
         background: rgba(255,255,255,0.035);
         border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 16px;
+        border-radius: 17px;
         padding: 18px 10px;
         text-align: center;
-        min-height: 95px;
+        min-height: 88px;
     }
 
-    .metric-title {
-        font-size: 11px;
-        color: #8992A3;
+    .metric-label {
+        color: #737D8D;
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
     .metric-value {
-        font-size: 18px;
-        font-weight: 700;
-        color: #F4F6FA;
-        margin-top: 8px;
+        color: white;
+        font-size: 17px;
+        font-weight: 750;
+        margin-top: 9px;
     }
 
 
-    /* =====================================================
-       INFO
-       ===================================================== */
-
-    .info-card {
-        background: rgba(20,23,32,0.75);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 20px;
-        padding: 25px;
-        margin-top: 20px;
-    }
-
-    .info-card h3 {
-        color: #ffffff;
-        margin-bottom: 12px;
-    }
-
-    .info-card p {
-        color: #9AA3B2;
-        line-height: 1.7;
-    }
-
-
-    /* =====================================================
-       TIER BAR
-       ===================================================== */
-
-    .tier-container {
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
+    /* =========================
+       TIER
+       ========================= */
 
     .tier-bar {
-        height: 8px;
+        height: 9px;
         border-radius: 20px;
-        background:
-            linear-gradient(
-                90deg,
-                #39404D 0%,
-                #65707F 30%,
-                #8D7B55 55%,
-                #A34D9C 75%,
-                #E24B67 100%
-            );
+        background: linear-gradient(
+            90deg,
+            #414754 0%,
+            #69717E 30%,
+            #A68A55 55%,
+            #A84E9C 75%,
+            #E74C65 100%
+        );
+        margin-top: 18px;
     }
 
     .tier-labels {
@@ -561,49 +348,73 @@ st.markdown(
     }
 
 
-    /* =====================================================
-       FOOTER
-       ===================================================== */
+    /* =========================
+       INFO
+       ========================= */
 
-    .footer {
-        text-align: center;
-        color: #515968;
-        font-size: 12px;
-        margin-top: 45px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(255,255,255,0.05);
+    .info-card {
+        background: rgba(20,23,32,0.75);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 20px;
+        padding: 25px;
+        margin-top: 20px;
+    }
+
+    .info-card h3 {
+        color: white;
+        margin-bottom: 12px;
+    }
+
+    .info-card p {
+        color: #9AA3B2;
+        line-height: 1.75;
+        font-size: 14px;
     }
 
 
-    /* =====================================================
+    /* =========================
        BOTÃO
-       ===================================================== */
+       ========================= */
 
     div.stButton > button {
-        border-radius: 12px;
-        height: 48px;
-        font-weight: 800;
+        height: 50px;
+        border-radius: 13px;
+        font-size: 14px;
+        font-weight: 850;
         letter-spacing: 1px;
         border: none;
-        transition: all 0.2s ease;
+        transition: 0.2s;
     }
 
     div.stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow:
-            0 8px 25px rgba(100,100,255,0.20);
+        box-shadow: 0 8px 30px rgba(120,100,255,0.25);
     }
 
 
-    /* =====================================================
+    /* =========================
+       FOOTER
+       ========================= */
+
+    .footer {
+        text-align: center;
+        color: #505866;
+        font-size: 12px;
+        margin-top: 45px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+
+    /* =========================
        MOBILE
-       ===================================================== */
+       ========================= */
 
     @media (max-width: 600px) {
 
         .main .block-container {
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
         .main-title {
@@ -611,7 +422,7 @@ st.markdown(
         }
 
         .result-perfection {
-            font-size: 44px;
+            font-size: 46px;
         }
 
         .rarity-value {
@@ -635,7 +446,7 @@ try:
     logo = Image.open("logo.png")
 
     st.markdown(
-        '<div class="logo-container">',
+        '<div class="logo-wrapper">',
         unsafe_allow_html=True
     )
 
@@ -650,12 +461,11 @@ try:
     )
 
 except Exception:
-
     pass
 
 
 # ============================================================
-# HEADER
+# TÍTULO
 # ============================================================
 
 st.markdown(
@@ -675,8 +485,8 @@ st.markdown(
 
 st.markdown(
     f"""
-    <div class="custom-card">
-        <div class="section-title">
+    <div class="card">
+        <div class="card-title">
             ⚙️ {t["configuration"]}
         </div>
     </div>
@@ -687,17 +497,23 @@ st.markdown(
 
 tipo = st.radio(
     t["lugh_type"],
-    ["Lugh Normal", "Lugh Prismático"],
+    [t["normal"], t["prismatic"]],
     horizontal=True
 )
 
 
-min_valor = TIPOS[tipo]["min"]
-max_valor = TIPOS[tipo]["max"]
-min_perfeicao = TIPOS[tipo]["min_perfeicao"]
+if tipo == t["normal"]:
+    tipo_codigo = "Lugh Normal"
+else:
+    tipo_codigo = "Lugh Prismático"
 
-cor = TIPOS[tipo]["color"]
-glow = TIPOS[tipo]["glow"]
+
+min_valor = TIPOS[tipo_codigo]["min"]
+max_valor = TIPOS[tipo_codigo]["max"]
+min_perfeicao = TIPOS[tipo_codigo]["min_perfeicao"]
+
+cor = TIPOS[tipo_codigo]["color"]
+glow = TIPOS[tipo_codigo]["glow"]
 
 
 # ============================================================
@@ -763,7 +579,7 @@ dp = calcular_distribuicao(
 
 
 # ============================================================
-# INPUT
+# PERFECTION
 # ============================================================
 
 perfeicao = st.number_input(
@@ -777,7 +593,7 @@ perfeicao = st.number_input(
 
 
 # ============================================================
-# BOTÃO
+# CALCULAR
 # ============================================================
 
 if st.button(
@@ -786,7 +602,7 @@ if st.button(
 ):
 
     # ========================================================
-    # CONVERSÃO PERFECTION → SCORE
+    # PERFECTION → SCORE
     # ========================================================
 
     proporcao = (
@@ -810,7 +626,7 @@ if st.button(
 
 
     # ========================================================
-    # CENTRO
+    # CENTRO DA DISTRIBUIÇÃO
     # ========================================================
 
     centro_pontos = (
@@ -819,10 +635,10 @@ if st.button(
 
 
     # ========================================================
-    # CAUDA
+    # CAUDA DA DISTRIBUIÇÃO
     # ========================================================
 
-    if pontos <= centro_pontos:
+    if pontos < centro_pontos:
 
         combinacoes_favoraveis = sum(
             quantidade
@@ -832,7 +648,7 @@ if st.button(
 
         lado_curva = t["lower_tail"]
 
-    else:
+    elif pontos > centro_pontos:
 
         combinacoes_favoraveis = sum(
             quantidade
@@ -841,6 +657,16 @@ if st.button(
         )
 
         lado_curva = t["upper_tail"]
+
+    else:
+
+        combinacoes_favoraveis = sum(
+            quantidade
+            for score, quantidade in dp.items()
+            if score <= pontos
+        )
+
+        lado_curva = t["center"]
 
 
     combinacoes_favoraveis = max(
@@ -876,26 +702,22 @@ if st.button(
     if chance < 10:
 
         tier = t["common"]
-        tier_desc = t["common_desc"]
 
     elif chance < 100:
 
         tier = t["rare"]
-        tier_desc = t["rare_desc"]
 
     elif chance < 1000:
 
         tier = t["very_rare"]
-        tier_desc = t["very_rare_desc"]
 
     else:
 
         tier = t["extremely_rare"]
-        tier_desc = t["extremely_rare_desc"]
 
 
     # ========================================================
-    # RESULTADO
+    # RESULTADO PRINCIPAL
     # ========================================================
 
     st.markdown(
@@ -904,11 +726,11 @@ if st.button(
             class="result-card"
             style="
                 --glow: {glow};
-                border-color: {cor}35;
+                --accent-border: {cor}45;
             "
         >
 
-            <div class="result-label">
+            <div class="result-type">
                 {tipo}
             </div>
 
@@ -916,7 +738,7 @@ if st.button(
                 {perfeicao:.2f}%
             </div>
 
-            <div class="result-label">
+            <div class="result-perfection-label">
                 Perfection
             </div>
 
@@ -935,16 +757,6 @@ if st.button(
                 {tier}
             </div>
 
-            <div
-                style="
-                    color:#737D8D;
-                    font-size:12px;
-                    margin-top:8px;
-                "
-            >
-                {tier_desc}
-            </div>
-
         </div>
         """,
         unsafe_allow_html=True
@@ -957,13 +769,14 @@ if st.button(
 
     col1, col2, col3 = st.columns(3)
 
+
     with col1:
 
         st.markdown(
             f"""
-            <div class="metric-card">
+            <div class="metric">
 
-                <div class="metric-title">
+                <div class="metric-label">
                     {t["equivalent_score"]}
                 </div>
 
@@ -981,9 +794,9 @@ if st.button(
 
         st.markdown(
             f"""
-            <div class="metric-card">
+            <div class="metric">
 
-                <div class="metric-title">
+                <div class="metric-label">
                     {t["exact_probability"]}
                 </div>
 
@@ -1001,9 +814,9 @@ if st.button(
 
         st.markdown(
             f"""
-            <div class="metric-card">
+            <div class="metric">
 
-                <div class="metric-title">
+                <div class="metric-label">
                     {t["possible_combinations"]}
                 </div>
 
@@ -1018,7 +831,7 @@ if st.button(
 
 
     # ========================================================
-    # POSIÇÃO NA CURVA
+    # POSIÇÃO
     # ========================================================
 
     st.markdown(
@@ -1044,9 +857,9 @@ if st.button(
 
     st.markdown(
         f"""
-        <div class="custom-card">
+        <div class="card">
 
-            <div class="section-title">
+            <div class="card-title">
                 📊 {t["distribution"]}
             </div>
 
@@ -1073,15 +886,13 @@ if st.button(
     ]
 
 
-    chart_data = pd.DataFrame({
-        "Score": scores,
-        "Probability": probabilities
-    })
+    chart_data = pd.DataFrame(
+        {
+            "Score": scores,
+            "Probability": probabilities
+        }
+    )
 
-
-    # ========================================================
-    # GRÁFICO
-    # ========================================================
 
     st.line_chart(
         chart_data,
@@ -1093,32 +904,30 @@ if st.button(
 
 
     # ========================================================
-    # MARCADOR DO LUGH
+    # MARCADOR
     # ========================================================
 
     st.markdown(
         f"""
-        <div
-            style="
-                text-align:center;
-                margin-top:-5px;
-                margin-bottom:15px;
-            "
-        >
+        <div style="
+            text-align:center;
+            margin-top:5px;
+            margin-bottom:20px;
+        ">
 
-            <span
-                style="
-                    display:inline-block;
-                    padding:7px 14px;
-                    border-radius:20px;
-                    background:{cor}18;
-                    border:1px solid {cor}40;
-                    color:{cor};
-                    font-size:12px;
-                    font-weight:700;
-                "
-            >
+            <span style="
+                display:inline-block;
+                padding:7px 15px;
+                border-radius:20px;
+                background:{cor}18;
+                border:1px solid {cor}40;
+                color:{cor};
+                font-size:12px;
+                font-weight:750;
+            ">
+
                 ✦ {t["your_lugh"]}: {pontos}
+
             </span>
 
         </div>
@@ -1128,26 +937,22 @@ if st.button(
 
 
     # ========================================================
-    # TIER BAR
+    # BARRA DE RARIDADE
     # ========================================================
 
     st.markdown(
         f"""
-        <div class="tier-container">
+        <div class="tier-bar"></div>
 
-            <div class="tier-bar"></div>
+        <div class="tier-labels">
 
-            <div class="tier-labels">
+            <span>{t["common"]}</span>
 
-                <span>{t["common"]}</span>
+            <span>{t["rare"]}</span>
 
-                <span>{t["rare"]}</span>
+            <span>{t["very_rare"]}</span>
 
-                <span>{t["very_rare"]}</span>
-
-                <span>{t["extremely_rare"]}</span>
-
-            </div>
+            <span>{t["extremely_rare"]}</span>
 
         </div>
         """,
@@ -1166,7 +971,7 @@ st.markdown(
         <h3>📖 {t["how_works"]}</h3>
 
         <p>
-            {t["how_works_text"].strip().replace(chr(10), "<br>")}
+            {t["how_works_text"]}
         </p>
 
     </div>
@@ -1183,10 +988,10 @@ st.markdown(
     f"""
     <div class="info-card">
 
-        <h3>{t["prismatic"]}</h3>
+        <h3>{t["prismatic_title"]}</h3>
 
         <p>
-            {t["prismatic_text"].strip().replace(chr(10), "<br>")}
+            {t["prismatic_text"]}
         </p>
 
     </div>
@@ -1206,7 +1011,7 @@ st.markdown(
         <h3>📚 {t["attributes"]}</h3>
 
         <p>
-            {t["attributes_text"].strip().replace(chr(10), "<br>")}
+            {t["attributes_text"]}
         </p>
 
     </div>
