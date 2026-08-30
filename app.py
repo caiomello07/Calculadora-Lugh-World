@@ -1369,7 +1369,6 @@ if st.session_state.result is not None:
     )
 
 
-    ```python
     # ========================================================
     # ESCALA DE RARIDADE
     # ========================================================
@@ -1532,9 +1531,6 @@ if st.session_state.result is not None:
             """,
             unsafe_allow_html=True
         )
-```
-
-
 
     # ========================================================
     # INFORMAÇÕES
