@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 # ==========================================
 # CONFIGURAÇÃO DA PÁGINA
 # ==========================================
@@ -23,6 +24,7 @@ TIPOS = {
         "max": 25,
         "min_perfeicao": 4.0
     },
+
     "Lugh Prismático": {
         "min": 12,
         "max": 25,
@@ -36,7 +38,11 @@ TIPOS = {
 # ==========================================
 
 @st.cache_data
-def calcular_distribuicao(quantidade_atributos, minimo, maximo):
+def calcular_distribuicao(
+    quantidade_atributos,
+    minimo,
+    maximo
+):
 
     dp = {0: 1}
 
@@ -83,15 +89,25 @@ tipo = st.radio(
     horizontal=True
 )
 
+
 min_valor = TIPOS[tipo]["min"]
 max_valor = TIPOS[tipo]["max"]
 min_perfeicao = TIPOS[tipo]["min_perfeicao"]
 
+
+# ==========================================
+# PONTUAÇÃO MÍNIMA E MÁXIMA
+# ==========================================
+
 min_pontos = ATRIBUTOS * min_valor
 max_pontos = ATRIBUTOS * max_valor
 
+
+# Quantidade de valores possíveis por atributo
 quantidade_valores = max_valor - min_valor + 1
 
+
+# Número total de combinações possíveis
 combinacoes_totais = quantidade_valores ** ATRIBUTOS
 
 
@@ -130,8 +146,20 @@ if st.button(
 ):
 
     # ======================================
-    # TRANSFORMA % EM PONTUAÇÃO
+    # CONVERSÃO PERFECTION → SCORE
     # ======================================
+
+    # A escala é diretamente proporcional:
+    #
+    # NORMAL
+    # 4%   → 16/200
+    # 80%  → 160/200
+    # 100% → 200/200
+    #
+    # PRISMÁTICO
+    # 48%  → 96/200
+    # 60%  → 120/200
+    # 100% → 200/200
 
     proporcao = (
         (perfeicao - min_perfeicao)
@@ -143,6 +171,11 @@ if st.button(
         + proporcao * (max_pontos - min_pontos)
     )
 
+
+    # ======================================
+    # GARANTE OS LIMITES
+    # ======================================
+
     pontos = max(
         min_pontos,
         min(pontos, max_pontos)
@@ -150,19 +183,34 @@ if st.button(
 
 
     # ======================================
+    # CENTRO DA DISTRIBUIÇÃO
+    # ======================================
+
+    centro_pontos = (
+        min_pontos + max_pontos
+    ) / 2
+
+
+    # ======================================
     # DECIDE QUAL CAUDA DA CURVA USAR
     # ======================================
 
-    # A porcentagem representa uma posição
-    # dentro da curva.
+    # A distribuição é simétrica.
     #
-    # Até 50%:
-    # usamos a parte esquerda da distribuição.
+    # Perfection abaixo do centro:
+    # procuramos a cauda inferior.
     #
-    # Acima de 50%:
-    # usamos a parte direita da distribuição.
+    # Perfection acima do centro:
+    # procuramos a cauda superior.
+    #
+    # Isso garante:
+    #
+    # 100% ↔ mínimo
+    # 99%  ↔ 5%
+    # 98%  ↔ 6%
+    # etc.
 
-    if perfeicao <= 50:
+    if pontos <= centro_pontos:
 
         combinacoes_favoraveis = sum(
             quantidade
@@ -180,13 +228,28 @@ if st.button(
 
 
     # ======================================
-    # CALCULA A RARIDADE
+    # SEGURANÇA
+    # ======================================
+
+    combinacoes_favoraveis = max(
+        1,
+        combinacoes_favoraveis
+    )
+
+
+    # ======================================
+    # PROBABILIDADE REAL
     # ======================================
 
     porcentagem_real = (
         combinacoes_favoraveis
         / combinacoes_totais
     ) * 100
+
+
+    # ======================================
+    # RARIDADE
+    # ======================================
 
     chance = (
         combinacoes_totais
@@ -206,24 +269,50 @@ if st.button(
         f"### {perfeicao:.2f}% Perfection"
     )
 
+
     st.metric(
         "Rarity",
         f"1 in {chance:,.0f}"
     )
+
 
     st.write(
         f"**Equivalent score:** "
         f"{pontos} / {max_pontos}"
     )
 
+
     st.write(
         f"**Exact probability:** "
         f"{porcentagem_real:.9f}%"
     )
 
+
     st.write(
         f"**Possible combinations:** "
         f"{combinacoes_totais:,}"
+    )
+
+
+    # ======================================
+    # INFORMAÇÃO DA POSIÇÃO NA CURVA
+    # ======================================
+
+    if pontos < centro_pontos:
+
+        lado_curva = "Lower tail"
+
+    elif pontos > centro_pontos:
+
+        lado_curva = "Upper tail"
+
+    else:
+
+        lado_curva = "Center"
+
+
+    st.caption(
+        f"Distribution position: {lado_curva}"
     )
 
 
@@ -235,7 +324,14 @@ if st.button(
 
     st.subheader("Rarity Distribution")
 
-    scores = list(range(min_pontos, max_pontos + 1))
+
+    scores = list(
+        range(
+            min_pontos,
+            max_pontos + 1
+        )
+    )
+
 
     probabilities = [
         (
@@ -245,10 +341,12 @@ if st.button(
         for score in scores
     ]
 
+
     chart_data = {
         "Score": scores,
         "Probability": probabilities
     }
+
 
     st.line_chart(
         chart_data,
@@ -256,6 +354,7 @@ if st.button(
         y="Probability",
         use_container_width=True
     )
+
 
     st.caption(
         "The closer a score is to the center of the curve, "
