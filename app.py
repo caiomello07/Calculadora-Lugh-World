@@ -46,7 +46,7 @@ TEXT = {
     "pt": {
 
         "title":
-            "✨ Calculadora de Perfection de Lugh",
+            "✨ Calculadora de Perfeição de Lugh",
 
         "subtitle":
             "Descubra o quão raro seu Lugh realmente é.",
