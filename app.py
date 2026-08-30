@@ -402,29 +402,26 @@ st.markdown(
 # LOGO
 # ============================================================
 
-try:
+logo_left, logo_center, logo_right = st.columns(
+    [1, 2, 1]
+)
 
-    logo = Image.open("logo.png")
+with logo_center:
 
-    # Cria uma coluna central ocupando toda a largura
-    # e centraliza a imagem através do alinhamento do Streamlit.
+    try:
 
-    col_esq, col_logo, col_dir = st.columns(
-        [1, 2, 1]
-    )
-
-    with col_logo:
+        logo = Image.open("logo.png")
 
         st.image(
             logo,
             width=220
         )
 
-except FileNotFoundError:
+    except FileNotFoundError:
 
-    st.warning(
-        "Arquivo logo.png não encontrado."
-    )
+        st.warning(
+            "Arquivo logo.png não encontrado."
+        )
 
 # ============================================================
 # TEXTOS ATUAIS
