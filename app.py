@@ -1,5 +1,4 @@
 import streamlit as st
-import math
 
 # ==========================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -105,7 +104,7 @@ dp = calcular_distribuicao(
 
 
 # ==========================================
-# INPUT DE PERFEIÇÃO
+# INPUT
 # ==========================================
 
 perfeicao = st.number_input(
@@ -127,9 +126,9 @@ if st.button(
     use_container_width=True
 ):
 
-    # --------------------------------------
+    # ======================================
     # TRANSFORMA % EM PONTUAÇÃO
-    # --------------------------------------
+    # ======================================
 
     proporcao = (perfeicao - 4) / 96
 
@@ -138,44 +137,64 @@ if st.button(
         + proporcao * (max_pontos - min_pontos)
     )
 
-    # --------------------------------------
-    # GARANTE OS LIMITES
-    # --------------------------------------
-
     pontos = max(
         min_pontos,
         min(pontos, max_pontos)
     )
 
-    # --------------------------------------
-    # COMBINAÇÕES PARA ESSA PONTUAÇÃO
-    # --------------------------------------
 
-    combinacoes_favoraveis = dp[pontos]
+    # ======================================
+    # DECIDE QUAL CAUDA DA CURVA USAR
+    # ======================================
 
-    # --------------------------------------
-    # CHANCE
-    # --------------------------------------
+    # A porcentagem representa uma posição
+    # dentro da curva.
+    #
+    # Até 50%:
+    # usamos a parte esquerda da distribuição.
+    #
+    # Acima de 50%:
+    # usamos a parte direita da distribuição.
 
-    chance = (
-        combinacoes_totais
-        / combinacoes_favoraveis
-    )
+    if perfeicao <= 50:
+
+        combinacoes_favoraveis = sum(
+            quantidade
+            for score, quantidade in dp.items()
+            if score <= pontos
+        )
+
+    else:
+
+        combinacoes_favoraveis = sum(
+            quantidade
+            for score, quantidade in dp.items()
+            if score >= pontos
+        )
+
+
+    # ======================================
+    # CALCULA A RARIDADE
+    # ======================================
 
     porcentagem_real = (
         combinacoes_favoraveis
         / combinacoes_totais
     ) * 100
 
-    # --------------------------------------
+    chance = (
+        combinacoes_totais
+        / combinacoes_favoraveis
+    )
+
+
+    # ======================================
     # RESULTADO
-    # --------------------------------------
+    # ======================================
 
     st.divider()
 
-    st.subheader(
-        f"{tipo}"
-    )
+    st.subheader(tipo)
 
     st.markdown(
         f"### {perfeicao:.2f}% Perfection"
@@ -192,7 +211,7 @@ if st.button(
     )
 
     st.write(
-        f"**Exact probability:** "
+        f"**Probability:** "
         f"{porcentagem_real:.9f}%"
     )
 
@@ -201,28 +220,25 @@ if st.button(
         f"{combinacoes_totais:,}"
     )
 
-    st.divider()
 
     # ======================================
-    # CURVA DE DISTRIBUIÇÃO
+    # CURVA
     # ======================================
+
+    st.divider()
 
     st.subheader("Rarity Distribution")
 
     scores = list(range(min_pontos, max_pontos + 1))
 
-    frequencies = [
-        dp[score]
+    probabilities = [
+        (
+            dp[score]
+            / combinacoes_totais
+        ) * 100
         for score in scores
     ]
 
-    # Normaliza para porcentagem
-    probabilities = [
-        (frequency / combinacoes_totais) * 100
-        for frequency in frequencies
-    ]
-
-    # Mostra a curva usando o gráfico nativo
     chart_data = {
         "Score": scores,
         "Probability": probabilities
@@ -236,6 +252,6 @@ if st.button(
     )
 
     st.caption(
-        "The center of the curve represents the most common "
-        "attribute combinations. The extremes are the rarest."
+        "The closer a score is to the center of the curve, "
+        "the more common it is. Extreme values are rarer."
     )
