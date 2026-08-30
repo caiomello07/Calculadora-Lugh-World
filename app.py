@@ -1,7 +1,5 @@
 import streamlit as st
 import plotly.graph_objects as go
-from PIL import Image
-
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -12,7 +10,6 @@ st.set_page_config(
     page_icon="✨",
     layout="centered"
 )
-
 
 # ============================================================
 # CONFIGURAÇÕES
@@ -463,28 +460,40 @@ t = TEXT[st.session_state.language]
 # LOGO
 # ============================================================
 
+import base64
+
 try:
 
-    logo = Image.open("logo.png")
+    with open("logo.png", "rb") as f:
+        logo_base64 = base64.b64encode(f.read()).decode()
 
-    # Centraliza a logo utilizando columns do Streamlit
-    logo_left, logo_center, logo_right = st.columns(
-        [1, 2, 1]
+    st.markdown(
+        f"""
+        <div style="
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px auto;
+        ">
+            <img
+                src="data:image/png;base64,{logo_base64}"
+                style="
+                    width: 220px;
+                    max-width: 80%;
+                    height: auto;
+                    display: block;
+                    margin: 0 auto;
+                "
+            >
+        </div>
+        """,
+        unsafe_allow_html=True
     )
-
-    with logo_center:
-
-        st.image(
-            logo,
-            width=220
-        )
 
 except FileNotFoundError:
 
-    st.warning(
-        "Arquivo logo.png não encontrado."
-    )
-
+    st.warning("Arquivo logo.png não encontrado.")
 
 # ============================================================
 # TÍTULO
