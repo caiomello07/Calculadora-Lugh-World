@@ -1,5 +1,7 @@
 import streamlit as st
 import plotly.graph_objects as go
+import base64
+import math
 
 
 # ============================================================
@@ -290,6 +292,23 @@ st.markdown(
     }
 
 
+    .logo-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+
+    .logo-wrapper img {
+        width: 220px;
+        max-width: 75%;
+        height: auto;
+        display: block;
+    }
+
+
     .perfection-number {
         text-align: center;
         font-size: 58px;
@@ -356,6 +375,89 @@ st.markdown(
     }
 
 
+    .rarity-scale {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+
+    .rarity-bar {
+        position: relative;
+        width: 100%;
+        height: 14px;
+        border-radius: 10px;
+
+        background:
+            linear-gradient(
+                to right,
+                #F43F5E 0%,
+                #C084FC 22%,
+                #60A5FA 38%,
+                #4CC9F0 50%,
+                #60A5FA 62%,
+                #C084FC 78%,
+                #F43F5E 100%
+            );
+
+        box-shadow:
+            0 0 12px rgba(76, 201, 240, 0.15);
+    }
+
+
+    .rarity-marker {
+        position: absolute;
+
+        top: 50%;
+
+        width: 22px;
+        height: 22px;
+
+        transform:
+            translate(-50%, -50%);
+
+        border-radius: 50%;
+
+        border:
+            3px solid white;
+
+        z-index: 5;
+    }
+
+
+    .rarity-labels {
+        display: grid;
+
+        grid-template-columns:
+            repeat(5, 1fr);
+
+        margin-top: 13px;
+
+        width: 100%;
+    }
+
+
+    .rarity-label {
+        text-align: center;
+
+        color: #8992A3;
+
+        font-size: 11px;
+
+        font-weight: 600;
+
+        line-height: 1.2;
+    }
+
+
+    .rarity-icon {
+        font-size: 23px;
+
+        line-height: 1;
+
+        margin-bottom: 6px;
+    }
+
+
     @media (max-width: 600px) {
 
         .main .block-container {
@@ -373,6 +475,18 @@ st.markdown(
 
         h1 {
             font-size: 30px;
+        }
+
+        .logo-wrapper img {
+            width: 180px;
+        }
+
+        .rarity-label {
+            font-size: 9px;
+        }
+
+        .rarity-icon {
+            font-size: 20px;
         }
     }
 
@@ -392,7 +506,7 @@ t = TEXT[
 
 
 # ============================================================
-# LOGO CENTRALIZADA
+# LOGO
 # ============================================================
 
 logo_left, logo_center, logo_right = st.columns(
@@ -404,12 +518,30 @@ with logo_center:
 
     try:
 
-        st.image(
+        with open(
             "logo.png",
-            use_container_width=True
+            "rb"
+        ) as f:
+
+            logo_base64 = (
+                base64.b64encode(
+                    f.read()
+                ).decode()
+            )
+
+
+        st.markdown(
+            f"""
+            <div class="logo-wrapper">
+                <img
+                    src="data:image/png;base64,{logo_base64}"
+                >
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
-    except Exception:
+    except FileNotFoundError:
 
         st.warning(
             "Arquivo logo.png não encontrado."
@@ -492,7 +624,7 @@ t = TEXT[
 
 
 # ============================================================
-# FUNÇÃO DE DISTRIBUIÇÃO
+# DISTRIBUIÇÃO
 # ============================================================
 
 @st.cache_data
@@ -526,12 +658,17 @@ def calcular_distribuicao(
                 )
 
 
-                proximo_dp[nova_soma] = (
+                proximo_dp[
+                    nova_soma
+                ] = (
+
                     proximo_dp.get(
                         nova_soma,
                         0
                     )
+
                     +
+
                     quantidade
                 )
 
@@ -659,6 +796,7 @@ if calcular:
 
 
     quantidade_valores = (
+
         max_valor
         -
         min_valor
@@ -668,6 +806,7 @@ if calcular:
 
 
     combinacoes_totais = (
+
         quantidade_valores
         **
         ATRIBUTOS
@@ -695,7 +834,9 @@ if calcular:
     pontos = round(
 
         min_pontos
+
         +
+
         proporcao
         *
         (
@@ -846,6 +987,107 @@ if calcular:
 
 
     # --------------------------------------------------------
+    # POSIÇÃO ESTATÍSTICA
+    #
+    # A posição da barra NÃO usa mais:
+    #
+    #     perfeicao = 75%
+    #     posição = 75%
+    #
+    # Ela usa a raridade real.
+    #
+    # A escala é logarítmica porque:
+    #
+    # 1 em 10
+    # 1 em 100
+    # 1 em 1000
+    #
+    # são ordens de grandeza diferentes.
+    # --------------------------------------------------------
+
+    if pontos == centro_pontos:
+
+        posicao_barra = 50.0
+
+    else:
+
+        # Raridade máxima usada para a escala visual
+        raridade_maxima = 1000.0
+
+        # Limita a chance para evitar log negativo
+        chance_visual = max(
+            1.0,
+            min(
+                chance,
+                raridade_maxima
+            )
+        )
+
+
+        # Normaliza log10:
+        #
+        # chance 1   → 0
+        # chance 10  → 1
+        # chance 100 → 2
+        # chance 1000 → 3
+
+        nivel_raridade = (
+
+            math.log10(
+                chance_visual
+            )
+            /
+            math.log10(
+                raridade_maxima
+            )
+        )
+
+
+        # Região central da barra
+        # representa a área comum.
+        #
+        # 50% = centro
+        #
+        # A raridade aumenta em direção
+        # aos extremos.
+
+        distancia = (
+
+            nivel_raridade
+            *
+            48.0
+        )
+
+
+        if pontos < centro_pontos:
+
+            posicao_barra = (
+                50.0
+                -
+                distancia
+            )
+
+        else:
+
+            posicao_barra = (
+                50.0
+                +
+                distancia
+            )
+
+
+    posicao_barra = max(
+
+        2.0,
+
+        min(
+            98.0,
+            posicao_barra
+        )
+    )
+
+
+    # --------------------------------------------------------
     # SALVA RESULTADO
     # --------------------------------------------------------
 
@@ -890,7 +1132,10 @@ if calcular:
             lado_curva,
 
         "tier":
-            tier
+            tier,
+
+        "posicao_barra":
+            posicao_barra
     }
 
 
@@ -962,6 +1207,11 @@ if st.session_state.result is not None:
 
     tier = resultado[
         "tier"
+    ]
+
+
+    posicao_barra = resultado[
+        "posicao_barra"
     ]
 
 
@@ -1320,217 +1570,118 @@ if st.session_state.result is not None:
     )
 
 
-    # --------------------------------------------------------
-    # POSIÇÃO DO LUGH
-    # --------------------------------------------------------
-
-    if max_pontos > min_pontos:
-
-        posicao_barra = (
-
-            (
-                pontos
-                -
-                min_pontos
-            )
-
-            /
-
-            (
-                max_pontos
-                -
-                min_pontos
-            )
-
-        ) * 100
-
-    else:
-
-        posicao_barra = 50
-
-
-    posicao_barra = max(
-
-        0,
-
-        min(
-            100,
-            posicao_barra
-        )
-    )
-
-
-    # --------------------------------------------------------
+    # ========================================================
     # BARRA
-    # --------------------------------------------------------
-
-    st.progress(
-        int(posicao_barra)
-    )
-
-
-    # ========================================================
-    # ESCALA DE RARIDADE
     # ========================================================
 
-    escala = st.columns(
-        5
+    st.markdown(
+        f"""
+        <div class="rarity-scale">
+
+            <div class="rarity-bar">
+
+                <div
+                    class="rarity-marker"
+                    style="
+                        left:{posicao_barra:.2f}%;
+
+                        background:{cor};
+
+                        box-shadow:
+                            0 0 10px {cor};
+                    "
+                >
+                </div>
+
+            </div>
+
+
+            <div class="rarity-labels">
+
+                <div class="rarity-label">
+
+                    <div class="rarity-icon">
+                        🔴
+                    </div>
+
+                    {t["extreme"]}
+
+                </div>
+
+
+                <div class="rarity-label">
+
+                    <div class="rarity-icon">
+                        🟣
+                    </div>
+
+                    {t["very_rare"]}
+
+                </div>
+
+
+                <div class="rarity-label">
+
+                    <div class="rarity-icon">
+                        🔵
+                    </div>
+
+                    {t["rare"]}
+
+                </div>
+
+
+                <div class="rarity-label">
+
+                    <div class="rarity-icon">
+                        🔷
+                    </div>
+
+                    {t["common"]}
+
+                </div>
+
+
+                <div class="rarity-label">
+
+                    <div class="rarity-icon">
+                        🔵
+                    </div>
+
+                    {t["rare"]}
+
+                </div>
+
+            </div>
+
+
+            <div class="rarity-labels">
+
+                <div></div>
+
+                <div class="rarity-label">
+
+                    🟣 {t["very_rare"]}
+
+                </div>
+
+                <div></div>
+
+                <div class="rarity-label">
+
+                    🟣 {t["very_rare"]}
+
+                </div>
+
+                <div></div>
+
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
-
-    # --------------------------------------------------------
-    # EXTREMAMENTE RARO - ESQUERDA
-    # --------------------------------------------------------
-
-    with escala[0]:
-
-        st.markdown(
-            """
-            <div style="
-                text-align:center;
-                font-size:24px;
-                line-height:1;
-            ">
-                🔴
-            </div>
-
-            <div style="
-                text-align:center;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-                margin-top:6px;
-                line-height:1.2;
-            ">
-                Extremamente<br>Raro
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # --------------------------------------------------------
-    # MUITO RARO - ESQUERDA
-    # --------------------------------------------------------
-
-    with escala[1]:
-
-        st.markdown(
-            """
-            <div style="
-                text-align:center;
-                font-size:24px;
-                line-height:1;
-            ">
-                🟣
-            </div>
-
-            <div style="
-                text-align:center;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-                margin-top:6px;
-                line-height:1.2;
-            ">
-                Muito<br>Raro
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # --------------------------------------------------------
-    # COMUM - CENTRO
-    # --------------------------------------------------------
-
-    with escala[2]:
-
-        st.markdown(
-            """
-            <div style="
-                text-align:center;
-                font-size:24px;
-                line-height:1;
-            ">
-                🔷
-            </div>
-
-            <div style="
-                text-align:center;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-                margin-top:6px;
-                line-height:1.2;
-            ">
-                Comum
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # --------------------------------------------------------
-    # MUITO RARO - DIREITA
-    # --------------------------------------------------------
-
-    with escala[3]:
-
-        st.markdown(
-            """
-            <div style="
-                text-align:center;
-                font-size:24px;
-                line-height:1;
-            ">
-                🟣
-            </div>
-
-            <div style="
-                text-align:center;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-                margin-top:6px;
-                line-height:1.2;
-            ">
-                Muito<br>Raro
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-
-    # --------------------------------------------------------
-    # EXTREMAMENTE RARO - DIREITA
-    # --------------------------------------------------------
-
-    with escala[4]:
-
-        st.markdown(
-            """
-            <div style="
-                text-align:center;
-                font-size:24px;
-                line-height:1;
-            ">
-                🔴
-            </div>
-
-            <div style="
-                text-align:center;
-                color:#8992A3;
-                font-size:11px;
-                font-weight:600;
-                margin-top:6px;
-                line-height:1.2;
-            ">
-                Extremamente<br>Raro
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
     # ========================================================
     # INFORMAÇÕES
