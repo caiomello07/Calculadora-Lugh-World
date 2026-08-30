@@ -20,18 +20,18 @@ ATRIBUTOS = 8
 
 
 # ============================================================
-# TIPOS
+# TIPOS DE LUGH
 # ============================================================
 
 TIPOS = {
-    "Lugh Normal": {
+    "normal": {
         "min": 1,
         "max": 25,
         "min_perfeicao": 4.0,
         "color": "#4CC9F0"
     },
 
-    "Lugh Prismático": {
+    "prismatic": {
         "min": 12,
         "max": 25,
         "min_perfeicao": 48.0,
@@ -46,74 +46,85 @@ TIPOS = {
 
 TEXT = {
 
-    "pt": {
-        "subtitle": "Descubra o quão raro seu Lugh realmente é.",
-        "configuration": "⚙️ Configuração",
-        "lugh_type": "Tipo de Lugh",
-        "normal": "Lugh Normal",
-        "prismatic": "Lugh Prismático",
-        "perfection": "Perfection",
-        "calculate": "✨ CALCULAR",
-        "rarity": "RARIDADE",
-        "equivalent": "Equivalent Score",
-        "probability": "Exact Probability",
-        "combinations": "Possible Combinations",
-        "distribution": "📊 Distribuição de Raridade",
-        "common": "Common",
-        "rare": "Rare",
-        "very_rare": "Very Rare",
-        "extreme": "Extremely Rare",
-        "how": "📖 Como funciona a raridade?",
-        "how_text": "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver do centro da distribuição, mais comum ele será. Lughs com pontuações extremamente baixas ou extremamente altas são progressivamente mais raros.",
-        "prismatic_title": "✨ Lughs Prismáticos",
-        "prismatic_text": "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria distribuição de atributos.",
-        "attributes": "📚 Sobre os Atributos dos Lughs",
-        "attributes_text": "Cada Lugh possui 8 atributos. A pontuação total é determinada pela soma desses atributos. A calculadora compara essa pontuação com todas as combinações matematicamente possíveis para aquele tipo de Lugh.",
-        "your_lugh": "YOUR LUGH",
-        "lower": "Lower tail",
-        "upper": "Upper tail",
-        "center": "Center",
-        "language": "Idioma"
-    },
-
     "en": {
         "subtitle": "Discover how rare your Lugh really is.",
-        "configuration": "⚙️ Configuration",
+        "language": "Language",
+        "configuration": "Configuration",
         "lugh_type": "Lugh Type",
         "normal": "Lugh Normal",
         "prismatic": "Lugh Prismatic",
         "perfection": "Perfection",
-        "calculate": "✨ CALCULATE",
-        "rarity": "RARITY",
+        "calculate": "CALCULATE",
+        "rarity": "Rarity",
         "equivalent": "Equivalent Score",
         "probability": "Exact Probability",
         "combinations": "Possible Combinations",
-        "distribution": "📊 Rarity Distribution",
+        "distribution": "Rarity Distribution",
+        "your_lugh": "YOUR LUGH",
+        "how": "How does rarity work?",
+        "how_text": "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the center of the distribution, the more common it is. Lughs with extremely low or extremely high scores are progressively rarer.",
+        "prismatic_title": "✨ Prismatic Lughs",
+        "prismatic_text": "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own attribute distribution.",
+        "attributes": "About Lugh Attributes",
+        "attributes_text": "Each Lugh has 8 attributes. The total score is determined by adding these attributes together. The calculator compares this score against every mathematically possible combination for that type of Lugh.",
         "common": "Common",
         "rare": "Rare",
         "very_rare": "Very Rare",
         "extreme": "Extremely Rare",
-        "how": "📖 How does rarity work?",
-        "how_text": "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the center of the distribution, the more common it is. Lughs with extremely low or extremely high scores are progressively rarer.",
-        "prismatic_title": "✨ Prismatic Lughs",
-        "prismatic_text": "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own attribute distribution.",
-        "attributes": "📚 About Lugh Attributes",
-        "attributes_text": "Each Lugh has 8 attributes. The total score is determined by adding these attributes together. The calculator compares this score against every mathematically possible combination for that type of Lugh.",
-        "your_lugh": "YOUR LUGH",
         "lower": "Lower tail",
         "upper": "Upper tail",
         "center": "Center",
-        "language": "Language"
+        "score": "Score",
+        "probability_axis": "Probability (%)",
+        "perfection_result": "Perfection",
+        "distribution_position": "Distribution position"
+    },
+
+    "pt": {
+        "subtitle": "Descubra o quão raro seu Lugh realmente é.",
+        "language": "Idioma",
+        "configuration": "Configuração",
+        "lugh_type": "Tipo de Lugh",
+        "normal": "Lugh Normal",
+        "prismatic": "Lugh Prismático",
+        "perfection": "Perfection",
+        "calculate": "CALCULAR",
+        "rarity": "Raridade",
+        "equivalent": "Pontuação Equivalente",
+        "probability": "Probabilidade Exata",
+        "combinations": "Combinações Possíveis",
+        "distribution": "Distribuição de Raridade",
+        "your_lugh": "SEU LUGH",
+        "how": "Como funciona a raridade?",
+        "how_text": "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver do centro da distribuição, mais comum ele será. Lughs com pontuações extremamente baixas ou extremamente altas são progressivamente mais raros.",
+        "prismatic_title": "✨ Lughs Prismáticos",
+        "prismatic_text": "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria distribuição de atributos.",
+        "attributes": "Sobre os Atributos dos Lughs",
+        "attributes_text": "Cada Lugh possui 8 atributos. A pontuação total é determinada pela soma desses atributos. A calculadora compara essa pontuação com todas as combinações matematicamente possíveis para aquele tipo de Lugh.",
+        "common": "Comum",
+        "rare": "Raro",
+        "very_rare": "Muito Raro",
+        "extreme": "Extremamente Raro",
+        "lower": "Cauda inferior",
+        "upper": "Cauda superior",
+        "center": "Centro",
+        "score": "Pontuação",
+        "probability_axis": "Probabilidade (%)",
+        "perfection_result": "Perfection",
+        "distribution_position": "Posição na distribuição"
     }
 }
 
 
 # ============================================================
-# ESTADO DO IDIOMA
+# SESSION STATE
 # ============================================================
 
 if "language" not in st.session_state:
     st.session_state.language = "en"
+
+if "result" not in st.session_state:
+    st.session_state.result = None
 
 
 # ============================================================
@@ -127,8 +138,8 @@ st.markdown(
     .stApp {
         background:
             radial-gradient(
-                circle at 50% -15%,
-                rgba(100, 70, 255, 0.16),
+                circle at 50% -10%,
+                rgba(100, 70, 255, 0.18),
                 transparent 45%
             ),
             #080A0F;
@@ -136,32 +147,28 @@ st.markdown(
 
     .main .block-container {
         max-width: 900px;
-        padding-top: 1.5rem;
+        padding-top: 1.2rem;
         padding-bottom: 3rem;
     }
 
     h1 {
         text-align: center;
         font-weight: 800;
+        letter-spacing: -1px;
     }
 
     .subtitle {
         text-align: center;
         color: #8992A3;
         font-size: 16px;
-        margin-bottom: 30px;
-    }
-
-    .logo {
-        display: flex;
-        justify-content: center;
+        margin-top: -10px;
+        margin-bottom: 25px;
     }
 
     div.stButton > button {
-        height: 50px;
         border-radius: 12px;
-        font-weight: 800;
-        letter-spacing: 1px;
+        min-height: 45px;
+        font-weight: 700;
     }
 
     div[data-testid="stMetric"] {
@@ -172,14 +179,45 @@ st.markdown(
     }
 
     div[data-testid="stMetricValue"] {
-        font-size: 22px;
+        font-size: 21px;
+    }
+
+    .rarity-title {
+        text-align: center;
+        color: #858E9E;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 25px;
+    }
+
+    .rarity-number {
+        text-align: center;
+        font-size: 46px;
+        font-weight: 900;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .perfection-number {
+        text-align: center;
+        font-size: 58px;
+        font-weight: 900;
+        margin-top: 10px;
+    }
+
+    .tier {
+        text-align: center;
+        color: #AAB2C0;
+        font-weight: 700;
+        margin-bottom: 25px;
     }
 
     .footer {
         text-align: center;
         color: #505866;
         font-size: 12px;
-        margin-top: 40px;
+        margin-top: 35px;
     }
 
     </style>
@@ -192,9 +230,14 @@ st.markdown(
 # LOGO
 # ============================================================
 
-logo_left, logo_center, logo_right = st.columns([1, 2, 1])
+# Usamos 5 colunas para que a coluna central tenha
+# exatamente o centro matemático da página.
 
-with logo_center:
+logo_1, logo_2, logo_3, logo_4, logo_5 = st.columns(
+    [1, 1, 2, 1, 1]
+)
+
+with logo_3:
 
     try:
 
@@ -202,12 +245,14 @@ with logo_center:
 
         st.image(
             logo,
-            width=180
+            width=220
         )
 
     except FileNotFoundError:
 
-        st.warning("Logo file not found: logo.png")
+        st.warning(
+            "logo.png was not found in the repository."
+        )
 
 
 # ============================================================
@@ -217,7 +262,11 @@ with logo_center:
 st.title("✨ Lugh Perfection Calculator")
 
 st.markdown(
-    f'<p class="subtitle">{TEXT[st.session_state.language]["subtitle"]}</p>',
+    f"""
+    <div class="subtitle">
+        {TEXT[st.session_state.language]["subtitle"]}
+    </div>
+    """,
     unsafe_allow_html=True
 )
 
@@ -226,32 +275,46 @@ st.markdown(
 # IDIOMA
 # ============================================================
 
-language_left, language_center, language_right = st.columns(
-    [1, 2, 1]
+lang_left, lang_en, lang_pt, lang_right = st.columns(
+    [2, 1, 1, 2]
 )
 
-with language_center:
+with lang_en:
 
-    idioma = st.radio(
-        TEXT[st.session_state.language]["language"],
-        [
-            "🇺🇸 English",
-            "🇧🇷 Português"
-        ],
-        horizontal=True
-    )
+    if st.button(
+        "🇺🇸 English",
+        use_container_width=True,
+        type=(
+            "primary"
+            if st.session_state.language == "en"
+            else "secondary"
+        )
+    ):
 
-    novo_idioma = (
-        "pt"
-        if idioma == "🇧🇷 Português"
-        else "en"
-    )
+        if st.session_state.language != "en":
 
-    if novo_idioma != st.session_state.language:
+            st.session_state.language = "en"
 
-        st.session_state.language = novo_idioma
+            st.rerun()
 
-        st.rerun()
+
+with lang_pt:
+
+    if st.button(
+        "🇧🇷 Português",
+        use_container_width=True,
+        type=(
+            "primary"
+            if st.session_state.language == "pt"
+            else "secondary"
+        )
+    ):
+
+        if st.session_state.language != "pt":
+
+            st.session_state.language = "pt"
+
+            st.rerun()
 
 
 t = TEXT[st.session_state.language]
@@ -261,49 +324,61 @@ t = TEXT[st.session_state.language]
 # CONFIGURAÇÃO
 # ============================================================
 
+st.divider()
+
 with st.container(border=True):
 
-    st.subheader(t["configuration"])
-
-    tipo_visual = st.radio(
-        t["lugh_type"],
-        [
-            t["normal"],
-            t["prismatic"]
-        ],
-        horizontal=True
+    st.subheader(
+        f"⚙️ {t['configuration']}"
     )
 
-    if tipo_visual == t["normal"]:
+    # --------------------------------------------------------
+    # FORM
+    # --------------------------------------------------------
 
-        tipo = "Lugh Normal"
+    with st.form("calculator_form"):
 
-    else:
+        tipo_visual = st.radio(
+            t["lugh_type"],
+            [
+                t["normal"],
+                t["prismatic"]
+            ],
+            horizontal=True
+        )
 
-        tipo = "Lugh Prismático"
+        if tipo_visual == t["normal"]:
 
+            tipo = "normal"
 
-    min_valor = TIPOS[tipo]["min"]
-    max_valor = TIPOS[tipo]["max"]
-    min_perfeicao = TIPOS[tipo]["min_perfeicao"]
+        else:
 
-    cor = TIPOS[tipo]["color"]
-
-
-    perfeicao = st.number_input(
-        t["perfection"],
-        min_value=min_perfeicao,
-        max_value=100.0,
-        value=min_perfeicao,
-        step=0.01,
-        format="%.2f"
-    )
+            tipo = "prismatic"
 
 
-    calcular = st.button(
-        t["calculate"],
-        use_container_width=True
-    )
+        configuracao = TIPOS[tipo]
+
+        min_valor = configuracao["min"]
+
+        max_valor = configuracao["max"]
+
+        min_perfeicao = configuracao["min_perfeicao"]
+
+
+        perfeicao = st.number_input(
+            t["perfection"],
+            min_value=min_perfeicao,
+            max_value=100.0,
+            value=min_perfeicao,
+            step=0.01,
+            format="%.2f"
+        )
+
+
+        calcular = st.form_submit_button(
+            f"✨ {t['calculate']}",
+            use_container_width=True
+        )
 
 
 # ============================================================
@@ -345,26 +420,28 @@ def calcular_distribuicao(
     return dp
 
 
-dp = calcular_distribuicao(
-    ATRIBUTOS,
-    min_valor,
-    max_valor
-)
-
-
 # ============================================================
-# CÁLCULO
+# CALCULAR
 # ============================================================
 
 if calcular:
+
+    dp = calcular_distribuicao(
+        ATRIBUTOS,
+        min_valor,
+        max_valor
+    )
+
 
     min_pontos = ATRIBUTOS * min_valor
 
     max_pontos = ATRIBUTOS * max_valor
 
+
     quantidade_valores = (
         max_valor - min_valor + 1
     )
+
 
     combinacoes_totais = (
         quantidade_valores ** ATRIBUTOS
@@ -380,11 +457,13 @@ if calcular:
         / (100.0 - min_perfeicao)
     )
 
+
     pontos = round(
         min_pontos
         + proporcao *
         (max_pontos - min_pontos)
     )
+
 
     pontos = max(
         min_pontos,
@@ -466,7 +545,7 @@ if calcular:
 
 
     # --------------------------------------------------------
-    # CLASSIFICAÇÃO
+    # TIER
     # --------------------------------------------------------
 
     if chance < 10:
@@ -486,44 +565,121 @@ if calcular:
         tier = t["extreme"]
 
 
+    # --------------------------------------------------------
+    # SALVA RESULTADO
+    # --------------------------------------------------------
+
+    st.session_state.result = {
+
+        "tipo": tipo,
+        "tipo_visual": tipo_visual,
+
+        "perfeicao": perfeicao,
+
+        "pontos": pontos,
+
+        "max_pontos": max_pontos,
+
+        "chance": chance,
+
+        "porcentagem_real": porcentagem_real,
+
+        "combinacoes_totais": combinacoes_totais,
+
+        "dp": dp,
+
+        "min_pontos": min_pontos,
+
+        "max_pontos": max_pontos,
+
+        "cor": configuracao["color"],
+
+        "lado_curva": lado_curva,
+
+        "tier": tier
+    }
+
+
+# ============================================================
+# RESULTADO
+# ============================================================
+
+if st.session_state.result is not None:
+
+    resultado = st.session_state.result
+
+    tipo = resultado["tipo"]
+
+    cor = resultado["cor"]
+
+    pontos = resultado["pontos"]
+
+    max_pontos = resultado["max_pontos"]
+
+    perfeicao = resultado["perfeicao"]
+
+    chance = resultado["chance"]
+
+    porcentagem_real = resultado["porcentagem_real"]
+
+    combinacoes_totais = resultado["combinacoes_totais"]
+
+    dp = resultado["dp"]
+
+    min_pontos = resultado["min_pontos"]
+
+    max_pontos = resultado["max_pontos"]
+
+    lado_curva = resultado["lado_curva"]
+
+    tier = resultado["tier"]
+
+
     # ========================================================
-    # RESULTADO
+    # RESULTADO PRINCIPAL
     # ========================================================
 
     st.divider()
 
-    st.subheader(tipo_visual)
-
-
-    # --------------------------------------------------------
-    # PERFECTION
-    # --------------------------------------------------------
-
-    st.markdown(
-        f"# {perfeicao:.2f}%"
+    st.subheader(
+        resultado["tipo_visual"]
     )
 
-    st.caption("Perfection")
-
-
-    # --------------------------------------------------------
-    # RARIDADE
-    # --------------------------------------------------------
 
     st.markdown(
-        f"## {t['rarity']}"
+        f"""
+        <div class="perfection-number">
+            {perfeicao:.2f}%
+        </div>
+        """,
+        unsafe_allow_html=True
     )
+
 
     st.markdown(
-        f"# 1 in {chance:,.0f}"
+        f"""
+        <div class="rarity-title">
+            {t["rarity"]}
+        </div>
+
+        <div
+            class="rarity-number"
+            style="color:{cor};"
+        >
+            1 in {chance:,.0f}
+        </div>
+
+        <div class="tier">
+            {tier}
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
-    st.caption(tier)
 
-
-    # --------------------------------------------------------
+    # ========================================================
     # MÉTRICAS
-    # --------------------------------------------------------
+    # ========================================================
 
     col1, col2, col3 = st.columns(3)
 
@@ -553,7 +709,7 @@ if calcular:
 
 
     st.caption(
-        f"{t['distribution']}: {lado_curva}"
+        f"{t['distribution_position']}: {lado_curva}"
     )
 
 
@@ -563,7 +719,9 @@ if calcular:
 
     st.divider()
 
-    st.subheader(t["distribution"])
+    st.subheader(
+        t["distribution"]
+    )
 
 
     scores = list(
@@ -575,49 +733,67 @@ if calcular:
 
 
     probabilities = [
+
         (
             dp[score]
             / combinacoes_totais
         ) * 100
+
         for score in scores
     ]
 
 
     probabilidade_score = (
+
         dp[pontos]
         / combinacoes_totais
+
     ) * 100
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # PLOTLY
-    # --------------------------------------------------------
+    # ========================================================
 
     fig = go.Figure()
 
 
     # CURVA
 
+    fill_color = (
+
+        "rgba(76,201,240,0.12)"
+
+        if tipo == "normal"
+
+        else
+
+        "rgba(217,70,239,0.12)"
+    )
+
+
     fig.add_trace(
         go.Scatter(
             x=scores,
             y=probabilities,
+
             mode="lines",
+
             name="Distribution",
-            line={
-                "color": cor,
-                "width": 4,
-                "shape": "spline"
-            },
-            fill="tozeroy",
-            fillcolor=(
-                "rgba(76,201,240,0.12)"
-                if tipo == "Lugh Normal"
-                else "rgba(217,70,239,0.12)"
+
+            line=dict(
+                color=cor,
+                width=4,
+                shape="spline"
             ),
+
+            fill="tozeroy",
+
+            fillcolor=fill_color,
+
             hovertemplate=(
-                "Score: %{x}"
-                "<br>Probability: %{y:.8f}%"
+                f"{t['score']}: %{{x}}"
+                f"<br>{t['probability_axis']}: %{{y:.8f}}%"
                 "<extra></extra>"
             )
         )
@@ -639,71 +815,78 @@ if calcular:
     fig.add_trace(
         go.Scatter(
             x=[pontos],
+
             y=[probabilidade_score],
+
             mode="markers",
+
             name=t["your_lugh"],
-            marker={
-                "size": 17,
-                "color": cor,
-                "line": {
-                    "color": "white",
-                    "width": 3
-                }
-            },
+
+            marker=dict(
+                size=18,
+                color=cor,
+                line=dict(
+                    color="white",
+                    width=3
+                )
+            ),
+
             hovertemplate=(
-                f"Perfection: {perfeicao:.2f}%"
-                f"<br>Score: {pontos}"
-                f"<br>Probability: {porcentagem_real:.9f}%"
+                f"{t['perfection_result']}: "
+                f"{perfeicao:.2f}%"
+                f"<br>{t['score']}: {pontos}"
+                f"<br>{t['probability']}: "
+                f"{porcentagem_real:.9f}%"
                 "<extra></extra>"
             )
         )
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # LAYOUT
-    # --------------------------------------------------------
+    # ========================================================
 
     fig.update_layout(
 
-        height=450,
+        height=460,
 
-        margin={
-            "l": 20,
-            "r": 20,
-            "t": 25,
-            "b": 45
-        },
+        margin=dict(
+            l=15,
+            r=15,
+            t=25,
+            b=45
+        ),
 
         paper_bgcolor="rgba(0,0,0,0)",
 
         plot_bgcolor="rgba(0,0,0,0)",
 
-        font={
-            "color": "#8992A3"
-        },
+        font=dict(
+            color="#8992A3"
+        ),
 
-        xaxis={
-            "title": "Score",
-            "gridcolor": "rgba(255,255,255,0.05)",
-            "zeroline": False
-        },
+        xaxis=dict(
+            title=t["score"],
+            gridcolor="rgba(255,255,255,0.05)",
+            zeroline=False
+        ),
 
-        yaxis={
-            "title": "Probability (%)",
-            "gridcolor": "rgba(255,255,255,0.05)",
-            "zeroline": False
-        },
+        yaxis=dict(
+            title=t["probability_axis"],
+            gridcolor="rgba(255,255,255,0.05)",
+            zeroline=False
+        ),
 
-        legend={
-            "bgcolor": "rgba(0,0,0,0)"
-        },
+        legend=dict(
+            bgcolor="rgba(0,0,0,0)"
+        ),
 
-        hoverlabel={
-            "bgcolor": "#151923",
-            "bordercolor": cor,
-            "font_color": "white"
-        }
+        hoverlabel=dict(
+            bgcolor="#151923",
+            bordercolor=cor,
+            font_color="white"
+        )
     )
 
 
@@ -711,13 +894,14 @@ if calcular:
         fig,
         use_container_width=True,
         config={
-            "displayModeBar": False
+            "displayModeBar": False,
+            "responsive": True
         }
     )
 
 
     # ========================================================
-    # ESCALA DE RARIDADE
+    # ESCALA
     # ========================================================
 
     st.progress(
@@ -727,18 +911,23 @@ if calcular:
         )
     )
 
-    scale_col1, scale_col2, scale_col3, scale_col4 = st.columns(4)
 
-    with scale_col1:
+    scale1, scale2, scale3, scale4 = st.columns(4)
+
+
+    with scale1:
         st.caption(t["common"])
 
-    with scale_col2:
+
+    with scale2:
         st.caption(t["rare"])
 
-    with scale_col3:
+
+    with scale3:
         st.caption(t["very_rare"])
 
-    with scale_col4:
+
+    with scale4:
         st.caption(t["extreme"])
 
 
@@ -748,8 +937,9 @@ if calcular:
 
 st.divider()
 
+
 with st.expander(
-    t["how"],
+    f"📖 {t['how']}",
     expanded=True
 ):
 
@@ -768,7 +958,7 @@ with st.expander(
 
 
 with st.expander(
-    t["attributes"]
+    f"📚 {t['attributes']}"
 ):
 
     st.write(
