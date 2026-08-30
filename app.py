@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
+import base64
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -460,8 +461,6 @@ t = TEXT[st.session_state.language]
 # LOGO
 # ============================================================
 
-import base64
-
 try:
 
     with open("logo.png", "rb") as f:
@@ -494,6 +493,7 @@ try:
 except FileNotFoundError:
 
     st.warning("Arquivo logo.png não encontrado.")
+
 
 # ============================================================
 # TÍTULO
@@ -702,6 +702,7 @@ if calcular:
     min_pontos = (
         ATRIBUTOS * min_valor
     )
+
 
     max_pontos = (
         ATRIBUTOS * max_valor
@@ -1262,133 +1263,135 @@ if st.session_state.result is not None:
     # ========================================================
 
     # Posição do Lugh dentro da distribuição
-posicao_barra = (
-    (pontos - min_pontos)
-    /
-    (max_pontos - min_pontos)
-) * 100
+    posicao_barra = (
+        (pontos - min_pontos)
+        /
+        (max_pontos - min_pontos)
+    ) * 100
 
-# Garante que fique entre 0 e 100
-posicao_barra = max(
-    0,
-    min(
-        100,
-        posicao_barra
+
+    # Garante que fique entre 0 e 100
+    posicao_barra = max(
+        0,
+        min(
+            100,
+            posicao_barra
+        )
     )
-)
 
 
-st.markdown(
-    f"""
-    <div style="
-        width: 100%;
-        margin-top: 18px;
-        margin-bottom: 5px;
-    ">
-
-        <!-- BARRA -->
+    st.markdown(
+        f"""
         <div style="
-            position: relative;
             width: 100%;
-            height: 14px;
-            border-radius: 10px;
-
-            background: linear-gradient(
-                to right,
-
-                #F43F5E 0%,
-                #C084FC 18%,
-                #60A5FA 32%,
-                #4CC9F0 45%,
-                #4CC9F0 55%,
-                #60A5FA 68%,
-                #C084FC 82%,
-                #F43F5E 100%
-            );
-
-            box-shadow:
-                0 0 12px rgba(76, 201, 240, 0.15);
+            margin-top: 18px;
+            margin-bottom: 5px;
         ">
 
-            <!-- MARCADOR -->
+            <!-- BARRA -->
             <div style="
-                position: absolute;
+                position: relative;
+                width: 100%;
+                height: 14px;
+                border-radius: 10px;
 
-                left: {posicao_barra}%;
+                background: linear-gradient(
+                    to right,
 
-                top: 50%;
-
-                transform:
-                    translate(-50%, -50%);
-
-                width: 22px;
-                height: 22px;
-
-                border-radius: 50%;
-
-                background: {cor};
-
-                border:
-                    3px solid white;
+                    #F43F5E 0%,
+                    #C084FC 18%,
+                    #60A5FA 32%,
+                    #4CC9F0 45%,
+                    #4CC9F0 55%,
+                    #60A5FA 68%,
+                    #C084FC 82%,
+                    #F43F5E 100%
+                );
 
                 box-shadow:
-                    0 0 10px {cor};
-
-                z-index: 2;
+                    0 0 12px rgba(76, 201, 240, 0.15);
             ">
+
+                <!-- MARCADOR -->
+                <div style="
+                    position: absolute;
+
+                    left: {posicao_barra}%;
+
+                    top: 50%;
+
+                    transform:
+                        translate(-50%, -50%);
+
+                    width: 22px;
+                    height: 22px;
+
+                    border-radius: 50%;
+
+                    background: {cor};
+
+                    border:
+                        3px solid white;
+
+                    box-shadow:
+                        0 0 10px {cor};
+
+                    z-index: 2;
+                ">
+                </div>
+
+            </div>
+
+
+            <!-- MARCAÇÕES -->
+            <div style="
+                display: flex;
+                justify-content: space-between;
+
+                margin-top: 8px;
+
+                color: #8992A3;
+
+                font-size: 12px;
+
+                font-weight: 600;
+            ">
+
+                <span>
+                    ● {t['extreme']}
+                </span>
+
+                <span>
+                    ● {t['very_rare']}
+                </span>
+
+                <span>
+                    ● {t['rare']}
+                </span>
+
+                <span>
+                    ● {t['common']}
+                </span>
+
+                <span>
+                    ● {t['rare']}
+                </span>
+
+                <span>
+                    ● {t['very_rare']}
+                </span>
+
+                <span>
+                    ● {t['extreme']}
+                </span>
+
             </div>
 
         </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-
-        <!-- MARCAÇÕES -->
-        <div style="
-            display: flex;
-            justify-content: space-between;
-
-            margin-top: 8px;
-
-            color: #8992A3;
-
-            font-size: 12px;
-
-            font-weight: 600;
-        ">
-
-            <span>
-                ● {t['extreme']}
-            </span>
-
-            <span>
-                ● {t['very_rare']}
-            </span>
-
-            <span>
-                ● {t['rare']}
-            </span>
-
-            <span>
-                ● {t['common']}
-            </span>
-
-            <span>
-                ● {t['rare']}
-            </span>
-
-            <span>
-                ● {t['very_rare']}
-            </span>
-
-            <span>
-                ● {t['extreme']}
-            </span>
-
-        </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 # ============================================================
 # INFORMAÇÕES
