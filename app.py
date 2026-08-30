@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 import base64
 import math
+import streamlit.components.v1 as components
 
 
 # ============================================================
@@ -241,12 +242,9 @@ TEXT = {
 # ============================================================
 
 if "language" not in st.session_state:
-
     st.session_state.language = "pt"
 
-
 if "result" not in st.session_state:
-
     st.session_state.result = None
 
 
@@ -359,6 +357,7 @@ st.markdown(
             1px solid rgba(255,255,255,0.07);
 
         border-radius: 16px;
+
         padding: 15px;
     }
 
@@ -372,89 +371,6 @@ st.markdown(
         border-radius: 14px;
         border-color:
             rgba(255,255,255,0.08);
-    }
-
-
-    .rarity-scale {
-        width: 100%;
-        margin-top: 20px;
-    }
-
-
-    .rarity-bar {
-        position: relative;
-        width: 100%;
-        height: 14px;
-        border-radius: 10px;
-
-        background:
-            linear-gradient(
-                to right,
-                #F43F5E 0%,
-                #C084FC 22%,
-                #60A5FA 38%,
-                #4CC9F0 50%,
-                #60A5FA 62%,
-                #C084FC 78%,
-                #F43F5E 100%
-            );
-
-        box-shadow:
-            0 0 12px rgba(76, 201, 240, 0.15);
-    }
-
-
-    .rarity-marker {
-        position: absolute;
-
-        top: 50%;
-
-        width: 22px;
-        height: 22px;
-
-        transform:
-            translate(-50%, -50%);
-
-        border-radius: 50%;
-
-        border:
-            3px solid white;
-
-        z-index: 5;
-    }
-
-
-    .rarity-labels {
-        display: grid;
-
-        grid-template-columns:
-            repeat(5, 1fr);
-
-        margin-top: 13px;
-
-        width: 100%;
-    }
-
-
-    .rarity-label {
-        text-align: center;
-
-        color: #8992A3;
-
-        font-size: 11px;
-
-        font-weight: 600;
-
-        line-height: 1.2;
-    }
-
-
-    .rarity-icon {
-        font-size: 23px;
-
-        line-height: 1;
-
-        margin-bottom: 6px;
     }
 
 
@@ -479,14 +395,6 @@ st.markdown(
 
         .logo-wrapper img {
             width: 180px;
-        }
-
-        .rarity-label {
-            font-size: 9px;
-        }
-
-        .rarity-icon {
-            font-size: 20px;
         }
     }
 
@@ -666,9 +574,7 @@ def calcular_distribuicao(
                         nova_soma,
                         0
                     )
-
                     +
-
                     quantidade
                 )
 
@@ -930,9 +836,7 @@ if calcular:
 
 
     combinacoes_favoraveis = max(
-
         1,
-
         combinacoes_favoraveis
     )
 
@@ -964,20 +868,17 @@ if calcular:
             "common"
         ]
 
-
     elif chance < 100:
 
         tier = t[
             "rare"
         ]
 
-
     elif chance < 1000:
 
         tier = t[
             "very_rare"
         ]
-
 
     else:
 
@@ -987,22 +888,24 @@ if calcular:
 
 
     # --------------------------------------------------------
-    # POSIÇÃO ESTATÍSTICA
+    # POSIÇÃO VISUAL DA RARIDADE
     #
-    # A posição da barra NÃO usa mais:
+    # A barra é baseada em CHANCE e não em PERFECTION.
     #
-    #     perfeicao = 75%
-    #     posição = 75%
+    # Centro:
+    #       50%
     #
-    # Ela usa a raridade real.
+    # 1 em 10:
+    #       aproximadamente região de Raro
     #
-    # A escala é logarítmica porque:
+    # 1 em 100:
+    #       região de Muito Raro
     #
-    # 1 em 10
-    # 1 em 100
-    # 1 em 1000
+    # 1 em 1000:
+    #       extremo
     #
-    # são ordens de grandeza diferentes.
+    # Escala logarítmica para representar melhor
+    # as diferenças de raridade.
     # --------------------------------------------------------
 
     if pontos == centro_pontos:
@@ -1011,51 +914,27 @@ if calcular:
 
     else:
 
-        # Raridade máxima usada para a escala visual
-        raridade_maxima = 1000.0
-
-        # Limita a chance para evitar log negativo
         chance_visual = max(
             1.0,
             min(
                 chance,
-                raridade_maxima
+                1000.0
             )
         )
 
 
-        # Normaliza log10:
-        #
-        # chance 1   → 0
-        # chance 10  → 1
-        # chance 100 → 2
-        # chance 1000 → 3
-
-        nivel_raridade = (
+        nivel = (
 
             math.log10(
                 chance_visual
             )
             /
-            math.log10(
-                raridade_maxima
-            )
+            3.0
         )
 
 
-        # Região central da barra
-        # representa a área comum.
-        #
-        # 50% = centro
-        #
-        # A raridade aumenta em direção
-        # aos extremos.
-
         distancia = (
-
-            nivel_raridade
-            *
-            48.0
+            nivel * 50.0
         )
 
 
@@ -1077,9 +956,7 @@ if calcular:
 
 
     posicao_barra = max(
-
         2.0,
-
         min(
             98.0,
             posicao_barra
@@ -1110,6 +987,9 @@ if calcular:
 
         "max_pontos":
             max_pontos,
+
+        "min_perfeicao":
+            min_perfeicao,
 
         "chance":
             chance,
@@ -1172,6 +1052,11 @@ if st.session_state.result is not None:
 
     max_pontos = resultado[
         "max_pontos"
+    ]
+
+
+    min_perfeicao = resultado[
+        "min_perfeicao"
     ]
 
 
@@ -1275,9 +1160,7 @@ if st.session_state.result is not None:
     with col1:
 
         st.metric(
-
             t["equivalent"],
-
             f"{pontos} / {max_pontos}"
         )
 
@@ -1285,9 +1168,7 @@ if st.session_state.result is not None:
     with col2:
 
         st.metric(
-
             t["probability"],
-
             f"{porcentagem_real:.9f}%"
         )
 
@@ -1295,9 +1176,7 @@ if st.session_state.result is not None:
     with col3:
 
         st.metric(
-
             t["combinations"],
-
             f"{combinacoes_totais:,}"
         )
 
@@ -1319,12 +1198,46 @@ if st.session_state.result is not None:
     )
 
 
+    # Todas as pontuações possíveis
     scores = list(
         range(
             min_pontos,
             max_pontos + 1
         )
     )
+
+
+    # Converte pontuação em Perfection
+    perfection_values = [
+
+        min_perfeicao
+
+        +
+
+        (
+            (
+                score
+                -
+                min_pontos
+            )
+            /
+            (
+                max_pontos
+                -
+                min_pontos
+            )
+        )
+
+        *
+
+        (
+            100.0
+            -
+            min_perfeicao
+        )
+
+        for score in scores
+    ]
 
 
     probabilities = [
@@ -1334,7 +1247,9 @@ if st.session_state.result is not None:
             /
             combinacoes_totais
         )
+
         *
+
         100
 
         for score in scores
@@ -1349,6 +1264,10 @@ if st.session_state.result is not None:
 
     ) * 100
 
+
+    # ========================================================
+    # PLOTLY
+    # ========================================================
 
     fig = go.Figure()
 
@@ -1370,7 +1289,7 @@ if st.session_state.result is not None:
 
         go.Scatter(
 
-            x=scores,
+            x=perfection_values,
 
             y=probabilities,
 
@@ -1395,12 +1314,14 @@ if st.session_state.result is not None:
 
             hovertemplate=(
 
-                f"{t['score']}: "
-                f"%{{x}}"
+                f"{t['perfection']}: "
 
-                f"<br>"
+                f"%{{x:.2f}}%"
+
+                "<br>"
 
                 f"{t['probability_axis']}: "
+
                 f"%{{y:.8f}}%"
 
                 "<extra></extra>"
@@ -1409,9 +1330,10 @@ if st.session_state.result is not None:
     )
 
 
+    # Linha do Lugh
     fig.add_vline(
 
-        x=pontos,
+        x=perfeicao,
 
         line_width=2,
 
@@ -1421,11 +1343,12 @@ if st.session_state.result is not None:
     )
 
 
+    # Marcador do Lugh
     fig.add_trace(
 
         go.Scatter(
 
-            x=[pontos],
+            x=[perfeicao],
 
             y=[probabilidade_score],
 
@@ -1452,16 +1375,13 @@ if st.session_state.result is not None:
             hovertemplate=(
 
                 f"{t['perfection']}: "
+
                 f"{perfeicao:.2f}%"
 
-                f"<br>"
-
-                f"{t['score']}: "
-                f"{pontos}"
-
-                f"<br>"
+                "<br>"
 
                 f"{t['probability']}: "
+
                 f"{porcentagem_real:.9f}%"
 
                 "<extra></extra>"
@@ -1469,6 +1389,10 @@ if st.session_state.result is not None:
         )
     )
 
+
+    # ========================================================
+    # LAYOUT DO GRÁFICO
+    # ========================================================
 
     fig.update_layout(
 
@@ -1500,8 +1424,15 @@ if st.session_state.result is not None:
         xaxis=dict(
 
             title=t[
-                "score"
+                "perfection"
             ],
+
+            range=[
+                min_perfeicao,
+                100
+            ],
+
+            ticksuffix="%",
 
             gridcolor=(
                 "rgba(255,255,255,0.05)"
@@ -1548,12 +1479,8 @@ if st.session_state.result is not None:
         use_container_width=True,
 
         config={
-
-            "displayModeBar":
-                False,
-
-            "responsive":
-                True
+            "displayModeBar": False,
+            "responsive": True
         }
     )
 
@@ -1571,36 +1498,203 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # BARRA
+    # BARRA DE RARIDADE
+    #
+    # Renderizada em componente HTML isolado para evitar
+    # que o Streamlit mostre o HTML como texto.
     # ========================================================
 
-    st.markdown(
-        f"""
-        <div class="rarity-scale">
+    html_barra = f"""
+    <!DOCTYPE html>
 
-            <div class="rarity-bar">
+    <html>
 
-                <div
-                    class="rarity-marker"
-                    style="
-                        left:{posicao_barra:.2f}%;
+    <head>
 
-                        background:{cor};
+        <style>
 
-                        box-shadow:
-                            0 0 10px {cor};
-                    "
-                >
-                </div>
+            * {{
+                box-sizing: border-box;
+            }}
+
+
+            html,
+            body {{
+                margin: 0;
+                padding: 0;
+
+                background: transparent;
+
+                overflow: hidden;
+            }}
+
+
+            body {{
+                font-family:
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    sans-serif;
+            }}
+
+
+            .container {{
+                width: 100%;
+
+                padding:
+                    12px 4px 0 4px;
+            }}
+
+
+            .bar {{
+                position: relative;
+
+                width: 100%;
+
+                height: 14px;
+
+                border-radius: 10px;
+
+                background:
+                    linear-gradient(
+                        to right,
+
+                        #F43F5E 0%,
+
+                        #C084FC 16.67%,
+
+                        #60A5FA 33.33%,
+
+                        #4CC9F0 50%,
+
+                        #60A5FA 66.67%,
+
+                        #C084FC 83.33%,
+
+                        #F43F5E 100%
+                    );
+
+                box-shadow:
+                    0 0 12px
+                    rgba(
+                        76,
+                        201,
+                        240,
+                        0.15
+                    );
+            }}
+
+
+            .marker {{
+                position: absolute;
+
+                left:
+                    {posicao_barra:.2f}%;
+
+                top: 50%;
+
+                width: 22px;
+
+                height: 22px;
+
+                transform:
+                    translate(
+                        -50%,
+                        -50%
+                    );
+
+                border-radius: 50%;
+
+                background:
+                    {cor};
+
+                border:
+                    3px solid white;
+
+                box-shadow:
+                    0 0 10px {cor};
+
+                z-index: 10;
+            }}
+
+
+            .labels {{
+                display: grid;
+
+                grid-template-columns:
+                    repeat(
+                        7,
+                        minmax(0, 1fr)
+                    );
+
+                width: 100%;
+
+                margin-top: 14px;
+
+                align-items: start;
+            }}
+
+
+            .label {{
+                text-align: center;
+
+                color: #8992A3;
+
+                font-size: 10px;
+
+                font-weight: 600;
+
+                line-height: 1.2;
+
+                padding:
+                    0 2px;
+            }}
+
+
+            .icon {{
+                font-size: 22px;
+
+                line-height: 22px;
+
+                margin-bottom: 6px;
+            }}
+
+
+            @media (max-width: 600px) {{
+
+                .label {{
+                    font-size: 8px;
+                }}
+
+                .icon {{
+                    font-size: 18px;
+                }}
+
+            }}
+
+        </style>
+
+    </head>
+
+
+    <body>
+
+        <div class="container">
+
+
+            <div class="bar">
+
+                <div class="marker"></div>
 
             </div>
 
 
-            <div class="rarity-labels">
+            <div class="labels">
 
-                <div class="rarity-label">
 
-                    <div class="rarity-icon">
+                <div class="label">
+
+                    <div class="icon">
                         🔴
                     </div>
 
@@ -1609,9 +1703,9 @@ if st.session_state.result is not None:
                 </div>
 
 
-                <div class="rarity-label">
+                <div class="label">
 
-                    <div class="rarity-icon">
+                    <div class="icon">
                         🟣
                     </div>
 
@@ -1620,9 +1714,9 @@ if st.session_state.result is not None:
                 </div>
 
 
-                <div class="rarity-label">
+                <div class="label">
 
-                    <div class="rarity-icon">
+                    <div class="icon">
                         🔵
                     </div>
 
@@ -1631,9 +1725,9 @@ if st.session_state.result is not None:
                 </div>
 
 
-                <div class="rarity-label">
+                <div class="label">
 
-                    <div class="rarity-icon">
+                    <div class="icon">
                         🔷
                     </div>
 
@@ -1642,9 +1736,9 @@ if st.session_state.result is not None:
                 </div>
 
 
-                <div class="rarity-label">
+                <div class="label">
 
-                    <div class="rarity-icon">
+                    <div class="icon">
                         🔵
                     </div>
 
@@ -1652,34 +1746,46 @@ if st.session_state.result is not None:
 
                 </div>
 
-            </div>
 
+                <div class="label">
 
-            <div class="rarity-labels">
+                    <div class="icon">
+                        🟣
+                    </div>
 
-                <div></div>
-
-                <div class="rarity-label">
-
-                    🟣 {t["very_rare"]}
+                    {t["very_rare"]}
 
                 </div>
 
-                <div></div>
 
-                <div class="rarity-label">
+                <div class="label">
 
-                    🟣 {t["very_rare"]}
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    {t["extreme"]}
 
                 </div>
 
-                <div></div>
 
             </div>
 
         </div>
-        """,
-        unsafe_allow_html=True
+
+    </body>
+
+    </html>
+    """
+
+
+    components.html(
+
+        html_barra,
+
+        height=105,
+
+        scrolling=False
     )
 
 
