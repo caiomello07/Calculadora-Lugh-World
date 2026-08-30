@@ -1,8 +1,8 @@
 import streamlit as st
 import plotly.graph_objects as go
 import base64
-import math
 import streamlit.components.v1 as components
+import math
 
 
 # ============================================================
@@ -25,7 +25,6 @@ APP_VERSION = "1.0.0"
 ATRIBUTOS = 8
 
 TIPOS = {
-
     "normal": {
         "min": 1,
         "max": 25,
@@ -50,8 +49,7 @@ TEXT = {
 
     "pt": {
 
-        "title":
-            "✨ Calculadora de Perfeição de Lugh",
+        "title": "✨ Calculadora de Perfeição de Lugh",
 
         "subtitle":
             "Descubra o quão raro seu Lugh realmente é.",
@@ -304,6 +302,7 @@ st.markdown(
         max-width: 75%;
         height: auto;
         display: block;
+        margin: 0 auto;
     }
 
 
@@ -396,6 +395,7 @@ st.markdown(
         .logo-wrapper img {
             width: 180px;
         }
+
     }
 
     </style>
@@ -431,11 +431,9 @@ with logo_center:
             "rb"
         ) as f:
 
-            logo_base64 = (
-                base64.b64encode(
-                    f.read()
-                ).decode()
-            )
+            logo_base64 = base64.b64encode(
+                f.read()
+            ).decode()
 
 
         st.markdown(
@@ -569,7 +567,6 @@ def calcular_distribuicao(
                 proximo_dp[
                     nova_soma
                 ] = (
-
                     proximo_dp.get(
                         nova_soma,
                         0
@@ -719,9 +716,9 @@ if calcular:
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # PERFECTION → SCORE
-    # --------------------------------------------------------
+    # ========================================================
 
     proporcao = (
 
@@ -764,9 +761,9 @@ if calcular:
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # CENTRO
-    # --------------------------------------------------------
+    # ========================================================
 
     centro_pontos = (
 
@@ -777,9 +774,9 @@ if calcular:
     ) / 2
 
 
-    # --------------------------------------------------------
-    # CAUDA
-    # --------------------------------------------------------
+    # ========================================================
+    # RARIDADE
+    # ========================================================
 
     if pontos < centro_pontos:
 
@@ -792,7 +789,6 @@ if calcular:
 
             if score <= pontos
         )
-
 
         lado_curva = t[
             "lower"
@@ -811,7 +807,6 @@ if calcular:
             if score >= pontos
         )
 
-
         lado_curva = t[
             "upper"
         ]
@@ -828,7 +823,6 @@ if calcular:
 
             if score <= pontos
         )
-
 
         lado_curva = t[
             "center"
@@ -858,9 +852,9 @@ if calcular:
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # CLASSIFICAÇÃO
-    # --------------------------------------------------------
+    # ========================================================
 
     if chance < 10:
 
@@ -887,26 +881,19 @@ if calcular:
         ]
 
 
-    # --------------------------------------------------------
-    # POSIÇÃO VISUAL DA RARIDADE
+    # ========================================================
+    # POSIÇÃO ESTATÍSTICA
     #
-    # A barra é baseada em CHANCE e não em PERFECTION.
+    # A barra representa a posição do Lugh na distribuição.
     #
-    # Centro:
-    #       50%
+    # O centro da curva fica exatamente em 50%.
     #
-    # 1 em 10:
-    #       aproximadamente região de Raro
+    # Quanto mais rara a combinação, mais próxima do extremo
+    # correspondente ela fica.
     #
-    # 1 em 100:
-    #       região de Muito Raro
-    #
-    # 1 em 1000:
-    #       extremo
-    #
-    # Escala logarítmica para representar melhor
-    # as diferenças de raridade.
-    # --------------------------------------------------------
+    # Utilizamos a probabilidade acumulada da cauda para evitar
+    # que pequenas diferenças de Perfection pareçam lineares.
+    # ========================================================
 
     if pontos == centro_pontos:
 
@@ -914,28 +901,59 @@ if calcular:
 
     else:
 
-        chance_visual = max(
-            1.0,
-            min(
-                chance,
-                1000.0
-            )
-        )
+        # Probabilidade da cauda.
+        #
+        # Para um ponto acima do centro:
+        #    P(X >= pontos)
+        #
+        # Para um ponto abaixo do centro:
+        #    P(X <= pontos)
 
-
-        nivel = (
-
-            math.log10(
-                chance_visual
-            )
+        probabilidade_cauda = (
+            combinacoes_favoraveis
             /
-            3.0
+            combinacoes_totais
         )
 
 
-        distancia = (
-            nivel * 50.0
+        # Evita log(0)
+        probabilidade_cauda = max(
+            probabilidade_cauda,
+            1 / combinacoes_totais
         )
+
+
+        # Converte a probabilidade em uma escala logarítmica.
+        #
+        # 50% = centro
+        #
+        # Quanto menor a probabilidade,
+        # maior o deslocamento.
+        #
+        # O valor de referência 0.5 representa o centro.
+
+        raridade_log = -math.log10(
+            probabilidade_cauda
+        )
+
+
+        # Normalização visual.
+        #
+        # O máximo é limitado a 100% para manter o marcador
+        # dentro da barra.
+
+        deslocamento = (
+
+            raridade_log
+            /
+            max(
+                1.0,
+                -math.log10(
+                    1 / combinacoes_totais
+                )
+            )
+
+        ) * 50.0
 
 
         if pontos < centro_pontos:
@@ -943,7 +961,7 @@ if calcular:
             posicao_barra = (
                 50.0
                 -
-                distancia
+                deslocamento
             )
 
         else:
@@ -951,22 +969,22 @@ if calcular:
             posicao_barra = (
                 50.0
                 +
-                distancia
+                deslocamento
             )
 
 
     posicao_barra = max(
-        2.0,
+        1.5,
         min(
-            98.0,
+            98.5,
             posicao_barra
         )
     )
 
 
-    # --------------------------------------------------------
-    # SALVA RESULTADO
-    # --------------------------------------------------------
+    # ========================================================
+    # RESULTADO
+    # ========================================================
 
     st.session_state.result = {
 
@@ -1032,6 +1050,11 @@ if st.session_state.result is not None:
 
     tipo = resultado[
         "tipo"
+    ]
+
+
+    tipo_visual = resultado[
+        "tipo_visual"
     ]
 
 
@@ -1108,9 +1131,7 @@ if st.session_state.result is not None:
 
 
     st.subheader(
-        resultado[
-            "tipo_visual"
-        ]
+        tipo_visual
     )
 
 
@@ -1198,7 +1219,6 @@ if st.session_state.result is not None:
     )
 
 
-    # Todas as pontuações possíveis
     scores = list(
         range(
             min_pontos,
@@ -1207,7 +1227,10 @@ if st.session_state.result is not None:
     )
 
 
-    # Converte pontuação em Perfection
+    # --------------------------------------------------------
+    # SCORE → PERFECTION
+    # --------------------------------------------------------
+
     perfection_values = [
 
         min_perfeicao
@@ -1215,17 +1238,21 @@ if st.session_state.result is not None:
         +
 
         (
+
             (
                 score
                 -
                 min_pontos
             )
+
             /
+
             (
                 max_pontos
                 -
                 min_pontos
             )
+
         )
 
         *
@@ -1330,7 +1357,10 @@ if st.session_state.result is not None:
     )
 
 
-    # Linha do Lugh
+    # ========================================================
+    # LINHA DO LUGH
+    # ========================================================
+
     fig.add_vline(
 
         x=perfeicao,
@@ -1343,7 +1373,10 @@ if st.session_state.result is not None:
     )
 
 
-    # Marcador do Lugh
+    # ========================================================
+    # MARCADOR
+    # ========================================================
+
     fig.add_trace(
 
         go.Scatter(
@@ -1391,7 +1424,7 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # LAYOUT DO GRÁFICO
+    # LAYOUT
     # ========================================================
 
     fig.update_layout(
@@ -1498,293 +1531,278 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # BARRA DE RARIDADE
+    # BARRA
     #
-    # Renderizada em componente HTML isolado para evitar
-    # que o Streamlit mostre o HTML como texto.
+    # IMPORTANTE:
+    # Esta parte é renderizada dentro de um componente HTML
+    # isolado. Assim o Streamlit não mostra o HTML como texto.
     # ========================================================
 
     html_barra = f"""
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-    <html>
+<html>
 
-    <head>
+<head>
 
-        <style>
+<style>
 
-            * {{
-                box-sizing: border-box;
-            }}
+* {{
+    box-sizing: border-box;
+}}
 
+html,
+body {{
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+}}
 
-            html,
-            body {{
-                margin: 0;
-                padding: 0;
+body {{
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}}
 
-                background: transparent;
+.container {{
+    width: 100%;
+    padding: 12px 4px 0 4px;
+}}
 
-                overflow: hidden;
-            }}
+.bar {{
+    position: relative;
 
+    width: 100%;
 
-            body {{
-                font-family:
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    sans-serif;
-            }}
+    height: 14px;
 
+    border-radius: 10px;
 
-            .container {{
-                width: 100%;
+    background:
+        linear-gradient(
+            to right,
 
-                padding:
-                    12px 4px 0 4px;
-            }}
+            #F43F5E 0%,
 
+            #C084FC 16.67%,
 
-            .bar {{
-                position: relative;
+            #60A5FA 33.33%,
 
-                width: 100%;
+            #4CC9F0 50%,
 
-                height: 14px;
+            #60A5FA 66.67%,
 
-                border-radius: 10px;
+            #C084FC 83.33%,
 
-                background:
-                    linear-gradient(
-                        to right,
+            #F43F5E 100%
+        );
 
-                        #F43F5E 0%,
+    box-shadow:
+        0 0 12px
+        rgba(
+            76,
+            201,
+            240,
+            0.15
+        );
+}}
 
-                        #C084FC 16.67%,
+.marker {{
+    position: absolute;
 
-                        #60A5FA 33.33%,
+    left:
+        {posicao_barra:.2f}%;
 
-                        #4CC9F0 50%,
+    top: 50%;
 
-                        #60A5FA 66.67%,
+    width: 22px;
 
-                        #C084FC 83.33%,
+    height: 22px;
 
-                        #F43F5E 100%
-                    );
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
-                box-shadow:
-                    0 0 12px
-                    rgba(
-                        76,
-                        201,
-                        240,
-                        0.15
-                    );
-            }}
+    border-radius: 50%;
 
+    background:
+        {cor};
 
-            .marker {{
-                position: absolute;
+    border:
+        3px solid white;
 
-                left:
-                    {posicao_barra:.2f}%;
+    box-shadow:
+        0 0 10px {cor};
 
-                top: 50%;
+    z-index: 10;
+}}
 
-                width: 22px;
+.labels {{
+    display: grid;
 
-                height: 22px;
+    grid-template-columns:
+        repeat(
+            7,
+            minmax(0, 1fr)
+        );
 
-                transform:
-                    translate(
-                        -50%,
-                        -50%
-                    );
+    width: 100%;
 
-                border-radius: 50%;
+    margin-top: 14px;
 
-                background:
-                    {cor};
+    align-items: start;
+}}
 
-                border:
-                    3px solid white;
+.label {{
+    text-align: center;
 
-                box-shadow:
-                    0 0 10px {cor};
+    color: #8992A3;
 
-                z-index: 10;
-            }}
+    font-size: 10px;
 
+    font-weight: 600;
 
-            .labels {{
-                display: grid;
+    line-height: 1.2;
 
-                grid-template-columns:
-                    repeat(
-                        7,
-                        minmax(0, 1fr)
-                    );
+    padding:
+        0 2px;
+}}
 
-                width: 100%;
+.icon {{
+    font-size: 22px;
 
-                margin-top: 14px;
+    line-height: 22px;
 
-                align-items: start;
-            }}
+    margin-bottom: 6px;
+}}
 
+@media (max-width: 600px) {{
 
-            .label {{
-                text-align: center;
+    .label {{
+        font-size: 8px;
+    }}
 
-                color: #8992A3;
+    .icon {{
+        font-size: 18px;
+    }}
 
-                font-size: 10px;
+}}
 
-                font-weight: 600;
+</style>
 
-                line-height: 1.2;
+</head>
 
-                padding:
-                    0 2px;
-            }}
 
+<body>
 
-            .icon {{
-                font-size: 22px;
+<div class="container">
 
-                line-height: 22px;
 
-                margin-bottom: 6px;
-            }}
+    <div class="bar">
 
+        <div class="marker"></div>
 
-            @media (max-width: 600px) {{
+    </div>
 
-                .label {{
-                    font-size: 8px;
-                }}
 
-                .icon {{
-                    font-size: 18px;
-                }}
+    <div class="labels">
 
-            }}
 
-        </style>
+        <div class="label">
 
-    </head>
-
-
-    <body>
-
-        <div class="container">
-
-
-            <div class="bar">
-
-                <div class="marker"></div>
-
+            <div class="icon">
+                🔴
             </div>
 
-
-            <div class="labels">
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🔴
-                    </div>
-
-                    {t["extreme"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🟣
-                    </div>
-
-                    {t["very_rare"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🔵
-                    </div>
-
-                    {t["rare"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🔷
-                    </div>
-
-                    {t["common"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🔵
-                    </div>
-
-                    {t["rare"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🟣
-                    </div>
-
-                    {t["very_rare"]}
-
-                </div>
-
-
-                <div class="label">
-
-                    <div class="icon">
-                        🔴
-                    </div>
-
-                    {t["extreme"]}
-
-                </div>
-
-
-            </div>
+            {t["extreme"]}
 
         </div>
 
-    </body>
 
-    </html>
-    """
+        <div class="label">
+
+            <div class="icon">
+                🟣
+            </div>
+
+            {t["very_rare"]}
+
+        </div>
+
+
+        <div class="label">
+
+            <div class="icon">
+                🔵
+            </div>
+
+            {t["rare"]}
+
+        </div>
+
+
+        <div class="label">
+
+            <div class="icon">
+                🔷
+            </div>
+
+            {t["common"]}
+
+        </div>
+
+
+        <div class="label">
+
+            <div class="icon">
+                🔵
+            </div>
+
+            {t["rare"]}
+
+        </div>
+
+
+        <div class="label">
+
+            <div class="icon">
+                🟣
+            </div>
+
+            {t["very_rare"]}
+
+        </div>
+
+
+        <div class="label">
+
+            <div class="icon">
+                🔴
+            </div>
+
+            {t["extreme"]}
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+"""
 
 
     components.html(
-
         html_barra,
-
         height=105,
-
         scrolling=False
     )
 
