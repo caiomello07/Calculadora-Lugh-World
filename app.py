@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 import plotly.graph_objects as go
 from PIL import Image
@@ -21,7 +22,6 @@ st.set_page_config(
 APP_VERSION = "1.0.0"
 
 ATRIBUTOS = 8
-
 
 TIPOS = {
 
@@ -240,13 +240,8 @@ TEXT = {
 # SESSION STATE
 # ============================================================
 
-# Português é o idioma padrão
-
 if "language" not in st.session_state:
     st.session_state.language = "pt"
-
-
-# Guarda o resultado do cálculo
 
 if "result" not in st.session_state:
     st.session_state.result = None
@@ -265,7 +260,6 @@ st.markdown(
        ====================================================== */
 
     .stApp {
-
         background:
             radial-gradient(
                 circle at 50% -10%,
@@ -281,12 +275,29 @@ st.markdown(
        ====================================================== */
 
     .main .block-container {
-
         max-width: 900px;
-
         padding-top: 1.5rem;
-
         padding-bottom: 3rem;
+    }
+
+
+    /* ======================================================
+       LOGO
+       ====================================================== */
+
+    .logo-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .logo-container img {
+        width: 220px;
+        max-width: 80%;
+        height: auto;
+        display: block;
     }
 
 
@@ -295,11 +306,8 @@ st.markdown(
        ====================================================== */
 
     h1 {
-
         text-align: center;
-
         font-weight: 800;
-
         letter-spacing: -1px;
     }
 
@@ -309,31 +317,12 @@ st.markdown(
        ====================================================== */
 
     .subtitle {
-
         text-align: center;
-
         color: #8992A3;
-
         font-size: 16px;
-
         margin-top: -10px;
-
         margin-bottom: 25px;
     }
-
-
-    /* ======================================================
-       LOGO
-       ====================================================== */
-
-    st.markdown(
-    """
-    <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-        <img src="data:image/png;base64,{}" style="width: 220px; height: auto;">
-    </div>
-    """.format(LOGO_BASE64),
-    unsafe_allow_html=True
-)
 
 
     /* ======================================================
@@ -341,15 +330,10 @@ st.markdown(
        ====================================================== */
 
     .perfection-number {
-
         text-align: center;
-
         font-size: 58px;
-
         font-weight: 900;
-
         margin-top: 15px;
-
         line-height: 1.1;
     }
 
@@ -359,17 +343,11 @@ st.markdown(
        ====================================================== */
 
     .rarity-title {
-
         text-align: center;
-
         color: #858E9E;
-
         font-size: 13px;
-
         text-transform: uppercase;
-
         letter-spacing: 2px;
-
         margin-top: 20px;
     }
 
@@ -379,13 +357,9 @@ st.markdown(
        ====================================================== */
 
     .rarity-number {
-
         text-align: center;
-
         font-size: 46px;
-
         font-weight: 900;
-
         margin-top: 5px;
     }
 
@@ -395,13 +369,9 @@ st.markdown(
        ====================================================== */
 
     .tier {
-
         text-align: center;
-
         color: #AAB2C0;
-
         font-weight: 700;
-
         margin-bottom: 25px;
     }
 
@@ -411,11 +381,8 @@ st.markdown(
        ====================================================== */
 
     div.stButton > button {
-
         border-radius: 12px;
-
         min-height: 45px;
-
         font-weight: 700;
     }
 
@@ -425,7 +392,6 @@ st.markdown(
        ====================================================== */
 
     div[data-testid="stMetric"] {
-
         background:
             rgba(255,255,255,0.035);
 
@@ -433,13 +399,11 @@ st.markdown(
             1px solid rgba(255,255,255,0.07);
 
         border-radius: 16px;
-
         padding: 15px;
     }
 
 
     div[data-testid="stMetricValue"] {
-
         font-size: 21px;
     }
 
@@ -449,9 +413,7 @@ st.markdown(
        ====================================================== */
 
     div[data-testid="stExpander"] {
-
         border-radius: 14px;
-
         border-color:
             rgba(255,255,255,0.08);
     }
@@ -464,28 +426,24 @@ st.markdown(
     @media (max-width: 600px) {
 
         .main .block-container {
-
             padding-left: 1rem;
-
             padding-right: 1rem;
         }
 
-
         .perfection-number {
-
             font-size: 45px;
         }
 
-
         .rarity-number {
-
             font-size: 36px;
         }
 
-
         h1 {
-
             font-size: 30px;
+        }
+
+        .logo-container img {
+            width: 180px;
         }
     }
 
@@ -510,10 +468,17 @@ try:
 
     logo = Image.open("logo.png")
 
-    st.image(
-        logo,
-        width=220
+    # Centraliza a logo utilizando columns do Streamlit
+    logo_left, logo_center, logo_right = st.columns(
+        [1, 2, 1]
     )
+
+    with logo_center:
+
+        st.image(
+            logo,
+            width=220
+        )
 
 except FileNotFoundError:
 
@@ -554,17 +519,11 @@ lang_left, lang_pt, lang_en, lang_right = st.columns(
 )
 
 
-# ------------------------------------------------------------
-# PORTUGUÊS
-# ------------------------------------------------------------
-
 with lang_pt:
 
     if st.button(
         "🇧🇷 Português",
-
         use_container_width=True,
-
         type=(
             "primary"
             if st.session_state.language == "pt"
@@ -575,21 +534,14 @@ with lang_pt:
         if st.session_state.language != "pt":
 
             st.session_state.language = "pt"
-
             st.rerun()
 
-
-# ------------------------------------------------------------
-# INGLÊS
-# ------------------------------------------------------------
 
 with lang_en:
 
     if st.button(
         "🇺🇸 English",
-
         use_container_width=True,
-
         type=(
             "primary"
             if st.session_state.language == "en"
@@ -600,11 +552,10 @@ with lang_en:
         if st.session_state.language != "en":
 
             st.session_state.language = "en"
-
             st.rerun()
 
 
-# Atualiza o idioma depois dos botões
+# Atualiza idioma
 
 t = TEXT[st.session_state.language]
 
@@ -622,13 +573,11 @@ def calcular_distribuicao(
 
     dp = {0: 1}
 
-
     for _ in range(
         quantidade_atributos
     ):
 
         proximo_dp = {}
-
 
         for soma, quantidade in dp.items():
 
@@ -639,20 +588,15 @@ def calcular_distribuicao(
 
                 nova_soma = soma + valor
 
-
                 proximo_dp[nova_soma] = (
-
                     proximo_dp.get(
                         nova_soma,
                         0
                     )
-
                     + quantidade
                 )
 
-
         dp = proximo_dp
-
 
     return dp
 
@@ -670,14 +614,9 @@ with st.container(border=True):
         t["configuration"]
     )
 
-
     with st.form(
         "calculator_form"
     ):
-
-        # ----------------------------------------------------
-        # TIPO DE LUGH
-        # ----------------------------------------------------
 
         tipo_visual = st.radio(
 
@@ -703,7 +642,6 @@ with st.container(border=True):
 
         configuracao = TIPOS[tipo]
 
-
         min_valor = configuracao["min"]
 
         max_valor = configuracao["max"]
@@ -712,10 +650,6 @@ with st.container(border=True):
             configuracao["min_perfeicao"]
         )
 
-
-        # ----------------------------------------------------
-        # PERFECTION
-        # ----------------------------------------------------
 
         perfeicao = st.number_input(
 
@@ -733,10 +667,6 @@ with st.container(border=True):
         )
 
 
-        # ----------------------------------------------------
-        # BOTÃO
-        # ----------------------------------------------------
-
         calcular = st.form_submit_button(
 
             f"✨ {t['calculate']}",
@@ -751,10 +681,6 @@ with st.container(border=True):
 
 if calcular:
 
-    # --------------------------------------------------------
-    # DISTRIBUIÇÃO
-    # --------------------------------------------------------
-
     dp = calcular_distribuicao(
 
         ATRIBUTOS,
@@ -765,14 +691,9 @@ if calcular:
     )
 
 
-    # --------------------------------------------------------
-    # LIMITES
-    # --------------------------------------------------------
-
     min_pontos = (
         ATRIBUTOS * min_valor
     )
-
 
     max_pontos = (
         ATRIBUTOS * max_valor
@@ -780,7 +701,6 @@ if calcular:
 
 
     quantidade_valores = (
-
         max_valor
         - min_valor
         + 1
@@ -788,7 +708,6 @@ if calcular:
 
 
     combinacoes_totais = (
-
         quantidade_valores
         ** ATRIBUTOS
     )
@@ -799,11 +718,8 @@ if calcular:
     # --------------------------------------------------------
 
     proporcao = (
-
         (perfeicao - min_perfeicao)
-
         /
-
         (100.0 - min_perfeicao)
     )
 
@@ -811,23 +727,15 @@ if calcular:
     pontos = round(
 
         min_pontos
-
         +
-
         proporcao
         *
         (max_pontos - min_pontos)
     )
 
 
-    # --------------------------------------------------------
-    # GARANTE LIMITES
-    # --------------------------------------------------------
-
     pontos = max(
-
         min_pontos,
-
         min(
             pontos,
             max_pontos
@@ -840,7 +748,6 @@ if calcular:
     # --------------------------------------------------------
 
     centro_pontos = (
-
         min_pontos
         +
         max_pontos
@@ -848,7 +755,7 @@ if calcular:
 
 
     # --------------------------------------------------------
-    # CAUDA DA DISTRIBUIÇÃO
+    # CAUDA
     # --------------------------------------------------------
 
     if pontos < centro_pontos:
@@ -862,7 +769,6 @@ if calcular:
 
             if score <= pontos
         )
-
 
         lado_curva = t["lower"]
 
@@ -879,7 +785,6 @@ if calcular:
             if score >= pontos
         )
 
-
         lado_curva = t["upper"]
 
 
@@ -895,40 +800,23 @@ if calcular:
             if score <= pontos
         )
 
-
         lado_curva = t["center"]
 
 
-    # --------------------------------------------------------
-    # SEGURANÇA
-    # --------------------------------------------------------
-
     combinacoes_favoraveis = max(
-
         1,
-
         combinacoes_favoraveis
     )
 
 
-    # --------------------------------------------------------
-    # PROBABILIDADE
-    # --------------------------------------------------------
-
     porcentagem_real = (
-
         combinacoes_favoraveis
         /
         combinacoes_totais
     ) * 100
 
 
-    # --------------------------------------------------------
-    # RARIDADE
-    # --------------------------------------------------------
-
     chance = (
-
         combinacoes_totais
         /
         combinacoes_favoraveis
@@ -1014,7 +902,6 @@ if st.session_state.result is not None:
 
     resultado = st.session_state.result
 
-
     tipo = resultado["tipo"]
 
     cor = resultado["cor"]
@@ -1058,10 +945,6 @@ if st.session_state.result is not None:
     )
 
 
-    # --------------------------------------------------------
-    # PERFECTION
-    # --------------------------------------------------------
-
     st.markdown(
         f"""
         <div
@@ -1074,10 +957,6 @@ if st.session_state.result is not None:
         unsafe_allow_html=True
     )
 
-
-    # --------------------------------------------------------
-    # RARIDADE
-    # --------------------------------------------------------
 
     st.markdown(
         f"""
@@ -1110,9 +989,7 @@ if st.session_state.result is not None:
     with col1:
 
         st.metric(
-
             t["equivalent"],
-
             f"{pontos} / {max_pontos}"
         )
 
@@ -1120,9 +997,7 @@ if st.session_state.result is not None:
     with col2:
 
         st.metric(
-
             t["probability"],
-
             f"{porcentagem_real:.9f}%"
         )
 
@@ -1130,15 +1005,12 @@ if st.session_state.result is not None:
     with col3:
 
         st.metric(
-
             t["combinations"],
-
             f"{combinacoes_totais:,}"
         )
 
 
     st.caption(
-
         f"{t['position']}: "
         f"{lado_curva}"
     )
@@ -1176,10 +1048,7 @@ if st.session_state.result is not None:
     ]
 
 
-    # Probabilidade do score exato
-
     probabilidade_score = (
-
         dp[pontos]
         /
         combinacoes_totais
@@ -1193,10 +1062,6 @@ if st.session_state.result is not None:
     fig = go.Figure()
 
 
-    # --------------------------------------------------------
-    # COR DO PREENCHIMENTO
-    # --------------------------------------------------------
-
     if tipo == "normal":
 
         fill_color = (
@@ -1209,10 +1074,6 @@ if st.session_state.result is not None:
             "rgba(217,70,239,0.12)"
         )
 
-
-    # --------------------------------------------------------
-    # CURVA
-    # --------------------------------------------------------
 
     fig.add_trace(
 
@@ -1255,10 +1116,6 @@ if st.session_state.result is not None:
     )
 
 
-    # --------------------------------------------------------
-    # LINHA DO LUGH
-    # --------------------------------------------------------
-
     fig.add_vline(
 
         x=pontos,
@@ -1270,10 +1127,6 @@ if st.session_state.result is not None:
         line_color=cor
     )
 
-
-    # --------------------------------------------------------
-    # MARCADOR
-    # --------------------------------------------------------
 
     fig.add_trace(
 
@@ -1326,7 +1179,7 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # LAYOUT DO GRÁFICO
+    # LAYOUT
     # ========================================================
 
     fig.update_layout(
@@ -1334,13 +1187,9 @@ if st.session_state.result is not None:
         height=460,
 
         margin=dict(
-
             l=15,
-
             r=15,
-
             t=25,
-
             b=45
         ),
 
@@ -1349,7 +1198,6 @@ if st.session_state.result is not None:
         plot_bgcolor="rgba(0,0,0,0)",
 
         font=dict(
-
             color="#8992A3"
         ),
 
@@ -1374,7 +1222,6 @@ if st.session_state.result is not None:
         ),
 
         legend=dict(
-
             bgcolor="rgba(0,0,0,0)"
         ),
 
@@ -1389,10 +1236,6 @@ if st.session_state.result is not None:
     )
 
 
-    # ========================================================
-    # EXIBE GRÁFICO
-    # ========================================================
-
     st.plotly_chart(
 
         fig,
@@ -1400,9 +1243,7 @@ if st.session_state.result is not None:
         use_container_width=True,
 
         config={
-
             "displayModeBar": False,
-
             "responsive": True
         }
     )
@@ -1500,3 +1341,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+```
