@@ -93,37 +93,19 @@ TEXT = {
             "📖 Como funciona a raridade?",
 
         "how_text":
-            (
-                "A raridade é calculada utilizando a distribuição "
-                "estatística de todas as combinações possíveis de "
-                "atributos. Quanto mais próximo um Lugh estiver do "
-                "centro da distribuição, mais comum ele será. "
-                "Lughs com pontuações extremamente baixas ou "
-                "extremamente altas são progressivamente mais raros."
-            ),
+            "A raridade é calculada utilizando a distribuição estatística de todas as combinações possíveis de atributos. Quanto mais próximo um Lugh estiver do centro da distribuição, mais comum ele será. Lughs com pontuações extremamente baixas ou extremamente altas são progressivamente mais raros.",
 
         "prismatic_title":
             "✨ Lughs Prismáticos",
 
         "prismatic_text":
-            (
-                "Lughs Prismáticos possuem uma faixa de atributos "
-                "diferente dos Lughs Normais. Por isso, sua raridade "
-                "é calculada utilizando sua própria curva de "
-                "distribuição."
-            ),
+            "Lughs Prismáticos possuem uma faixa de atributos diferente dos Lughs Normais. Por isso, sua raridade é calculada utilizando sua própria curva de distribuição.",
 
         "attributes":
             "📚 Sobre os Atributos dos Lughs",
 
         "attributes_text":
-            (
-                "Cada Lugh possui 8 atributos. A pontuação total "
-                "é determinada pela soma desses atributos. "
-                "A calculadora compara essa pontuação com todas "
-                "as combinações matematicamente possíveis para "
-                "aquele tipo de Lugh."
-            ),
+            "Cada Lugh possui 8 atributos. A pontuação total é determinada pela soma desses atributos. A calculadora compara essa pontuação com todas as combinações matematicamente possíveis para aquele tipo de Lugh.",
 
         "common":
             "Comum",
@@ -205,34 +187,19 @@ TEXT = {
             "📖 How does rarity work?",
 
         "how_text":
-            (
-                "Rarity is calculated using the statistical "
-                "distribution of all possible attribute combinations. "
-                "The closer a Lugh is to the center of the distribution, "
-                "the more common it is. Lughs with extremely low or "
-                "extremely high scores are progressively rarer."
-            ),
+            "Rarity is calculated using the statistical distribution of all possible attribute combinations. The closer a Lugh is to the center of the distribution, the more common it is. Lughs with extremely low or extremely high scores are progressively rarer.",
 
         "prismatic_title":
             "✨ Prismatic Lughs",
 
         "prismatic_text":
-            (
-                "Prismatic Lughs have a different attribute range "
-                "from Normal Lughs. Their rarity is therefore "
-                "calculated using their own distribution curve."
-            ),
+            "Prismatic Lughs have a different attribute range from Normal Lughs. Their rarity is therefore calculated using their own distribution curve.",
 
         "attributes":
             "📚 About Lugh Attributes",
 
         "attributes_text":
-            (
-                "Each Lugh has 8 attributes. The total score is "
-                "determined by adding these attributes together. "
-                "The calculator compares this score against every "
-                "mathematically possible combination for that type."
-            ),
+            "Each Lugh has 8 attributes. The total score is determined by adding these attributes together. The calculator compares this score against every mathematically possible combination for that type.",
 
         "common":
             "Common",
@@ -299,17 +266,20 @@ st.markdown(
             #080A0F;
     }
 
+
     .main .block-container {
         max-width: 900px;
         padding-top: 1.5rem;
         padding-bottom: 3rem;
     }
 
+
     h1 {
         text-align: center;
         font-weight: 800;
         letter-spacing: -1px;
     }
+
 
     .subtitle {
         text-align: center;
@@ -319,6 +289,7 @@ st.markdown(
         margin-bottom: 25px;
     }
 
+
     .perfection-number {
         text-align: center;
         font-size: 58px;
@@ -326,6 +297,7 @@ st.markdown(
         margin-top: 15px;
         line-height: 1.1;
     }
+
 
     .rarity-title {
         text-align: center;
@@ -336,12 +308,14 @@ st.markdown(
         margin-top: 20px;
     }
 
+
     .rarity-number {
         text-align: center;
         font-size: 46px;
         font-weight: 900;
         margin-top: 5px;
     }
+
 
     .tier {
         text-align: center;
@@ -350,11 +324,13 @@ st.markdown(
         margin-bottom: 25px;
     }
 
+
     div.stButton > button {
         border-radius: 12px;
         min-height: 45px;
         font-weight: 700;
     }
+
 
     div[data-testid="stMetric"] {
         background:
@@ -367,15 +343,18 @@ st.markdown(
         padding: 15px;
     }
 
+
     div[data-testid="stMetricValue"] {
         font-size: 21px;
     }
+
 
     div[data-testid="stExpander"] {
         border-radius: 14px;
         border-color:
             rgba(255,255,255,0.08);
     }
+
 
     @media (max-width: 600px) {
 
@@ -413,21 +392,28 @@ t = TEXT[
 
 
 # ============================================================
-# LOGO
+# LOGO CENTRALIZADA
 # ============================================================
 
-try:
+logo_left, logo_center, logo_right = st.columns(
+    [1, 2, 1]
+)
 
-    st.image(
-        "logo.png",
-        width=220
-    )
 
-except Exception:
+with logo_center:
 
-    st.warning(
-        "Arquivo logo.png não encontrado."
-    )
+    try:
+
+        st.image(
+            "logo.png",
+            use_container_width=True
+        )
+
+    except Exception:
+
+        st.warning(
+            "Arquivo logo.png não encontrado."
+        )
 
 
 # ============================================================
@@ -1067,9 +1053,7 @@ if st.session_state.result is not None:
 
 
     st.caption(
-
-        f"{t['position']}: "
-        f"{lado_curva}"
+        f"{t['position']}: {lado_curva}"
     )
 
 
@@ -1325,7 +1309,7 @@ if st.session_state.result is not None:
 
 
     # ========================================================
-    # ESCALA DE RARIDADE
+    # POSIÇÃO NA DISTRIBUIÇÃO
     # ========================================================
 
     st.divider()
@@ -1336,7 +1320,9 @@ if st.session_state.result is not None:
     )
 
 
-    # Posição percentual do Lugh
+    # --------------------------------------------------------
+    # POSIÇÃO DO LUGH
+    # --------------------------------------------------------
 
     if max_pontos > min_pontos:
 
@@ -1374,28 +1360,21 @@ if st.session_state.result is not None:
     )
 
 
-    # Barra nativa do Streamlit
+    # --------------------------------------------------------
+    # BARRA
+    # --------------------------------------------------------
 
     st.progress(
         int(posicao_barra)
     )
 
 
-    # ========================================================
-    # MARCADOR DA POSIÇÃO
-    # ========================================================
-
-    st.caption(
-        f"📍 {t['score']}: {pontos} / {max_pontos}"
-    )
-
-
-    # ========================================================
-    # ESCALA SIMÉTRICA
-    # ========================================================
+    # --------------------------------------------------------
+    # ESCALA DE RARIDADE
+    # --------------------------------------------------------
 
     escala = st.columns(
-        7
+        5
     )
 
 
@@ -1416,32 +1395,18 @@ if st.session_state.result is not None:
     with escala[2]:
 
         st.markdown(
-            "🔵 **" + t["rare"] + "**"
+            "🔷 **" + t["common"] + "**"
         )
 
 
     with escala[3]:
 
         st.markdown(
-            "🔷 **" + t["common"] + "**"
-        )
-
-
-    with escala[4]:
-
-        st.markdown(
-            "🔵 **" + t["rare"] + "**"
-        )
-
-
-    with escala[5]:
-
-        st.markdown(
             "🟣 **" + t["very_rare"] + "**"
         )
 
 
-    with escala[6]:
+    with escala[4]:
 
         st.markdown(
             "🔴 **" + t["extreme"] + "**"
