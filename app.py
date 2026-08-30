@@ -1369,48 +1369,171 @@ if st.session_state.result is not None:
     )
 
 
-    # --------------------------------------------------------
+    ```python
+    # ========================================================
     # ESCALA DE RARIDADE
-    # --------------------------------------------------------
+    # ========================================================
 
     escala = st.columns(
         5
     )
 
 
+    # --------------------------------------------------------
+    # EXTREMAMENTE RARO - ESQUERDA
+    # --------------------------------------------------------
+
     with escala[0]:
 
         st.markdown(
-            "🔴 **" + t["extreme"] + "**"
+            """
+            <div style="
+                text-align:center;
+                font-size:24px;
+                line-height:1;
+            ">
+                🔴
+            </div>
+
+            <div style="
+                text-align:center;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+                margin-top:6px;
+                line-height:1.2;
+            ">
+                Extremamente<br>Raro
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
+
+    # --------------------------------------------------------
+    # MUITO RARO - ESQUERDA
+    # --------------------------------------------------------
 
     with escala[1]:
 
         st.markdown(
-            "🟣 **" + t["very_rare"] + "**"
+            """
+            <div style="
+                text-align:center;
+                font-size:24px;
+                line-height:1;
+            ">
+                🟣
+            </div>
+
+            <div style="
+                text-align:center;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+                margin-top:6px;
+                line-height:1.2;
+            ">
+                Muito<br>Raro
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
+
+    # --------------------------------------------------------
+    # COMUM - CENTRO
+    # --------------------------------------------------------
 
     with escala[2]:
 
         st.markdown(
-            "🔷 **" + t["common"] + "**"
+            """
+            <div style="
+                text-align:center;
+                font-size:24px;
+                line-height:1;
+            ">
+                🔷
+            </div>
+
+            <div style="
+                text-align:center;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+                margin-top:6px;
+                line-height:1.2;
+            ">
+                Comum
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
+
+    # --------------------------------------------------------
+    # MUITO RARO - DIREITA
+    # --------------------------------------------------------
 
     with escala[3]:
 
         st.markdown(
-            "🟣 **" + t["very_rare"] + "**"
+            """
+            <div style="
+                text-align:center;
+                font-size:24px;
+                line-height:1;
+            ">
+                🟣
+            </div>
+
+            <div style="
+                text-align:center;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+                margin-top:6px;
+                line-height:1.2;
+            ">
+                Muito<br>Raro
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
+
+    # --------------------------------------------------------
+    # EXTREMAMENTE RARO - DIREITA
+    # --------------------------------------------------------
 
     with escala[4]:
 
         st.markdown(
-            "🔴 **" + t["extreme"] + "**"
+            """
+            <div style="
+                text-align:center;
+                font-size:24px;
+                line-height:1;
+            ">
+                🔴
+            </div>
+
+            <div style="
+                text-align:center;
+                color:#8992A3;
+                font-size:11px;
+                font-weight:600;
+                margin-top:6px;
+                line-height:1.2;
+            ">
+                Extremamente<br>Raro
+            </div>
+            """,
+            unsafe_allow_html=True
         )
+```
+
 
 
     # ========================================================
